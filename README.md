@@ -1,3 +1,3 @@
-# full-stack-open
+# Full Stack open
 
-> Exercise solutions for [Full stack open](https://fullstackopen.com/) course
+My exercise solutions for [Full Stack open](https://fullstackopen.com/) course
