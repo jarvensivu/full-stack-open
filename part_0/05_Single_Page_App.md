@@ -1,3 +1,4 @@
+```mermaid
 sequenceDiagram
 participant browser
 participant server
@@ -30,3 +31,4 @@ participant server
     activate server
     server-->>browser: the HTML file
     deactivate server
+```
