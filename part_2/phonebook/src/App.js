@@ -23,11 +23,19 @@ const App = () => {
       (person) => person.name === newPerson.name.trim()
     );
     if (result === undefined) {
-      personService.create(newPerson).then((person) => {
-        setAllPersons(allPersons.concat(person));
-        setNewPerson({ name: "", number: "" });
-        displayNotification("success", `${person.name} was successfully added`);
-      });
+      personService
+        .create(newPerson)
+        .then((person) => {
+          setAllPersons(allPersons.concat(person));
+          setNewPerson({ name: "", number: "" });
+          displayNotification(
+            "success",
+            `${person.name} was successfully added`
+          );
+        })
+        .catch((error) => {
+          displayNotification("error", `${error.response.data.error}`);
+        });
     } else {
       if (
         window.confirm(
