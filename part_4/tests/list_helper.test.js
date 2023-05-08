@@ -63,6 +63,7 @@ const listWithManyBlogs = [
     __v: 0
   }
 ]
+
 test('dummy returns one', () => {
   const result = listHelper.dummy(emptyBlogList)
   expect(result).toBe(1)
@@ -83,5 +84,31 @@ describe('total likes', () => {
   test('of a bigger list is calculated right', () => {
     const result = listHelper.totalLikes(listWithManyBlogs)
     expect(result).toBe(36)
+  })
+})
+
+describe('favourite blog', () => {
+
+  test('of empty list is null', () => {
+    const result = listHelper.favoriteBlog(emptyBlogList)
+    expect(result).toBeNull()
+  })
+
+  test('of a list with only one blog equals that blog', () => {
+    const result = listHelper.favoriteBlog(listWithOneBlog)
+    expect(result).toEqual(  {
+        title: 'Go To Statement Considered Harmful',
+        author: 'Edsger W. Dijkstra',
+        likes: 5,
+      })
+  })
+
+  test('of a bigger list is correct', () => {
+    const result = listHelper.favoriteBlog(listWithManyBlogs)
+    expect(result).toEqual({
+        title: 'Canonical string reduction',
+        author: 'Edsger W. Dijkstra',
+        likes: 12
+      })
   })
 })
