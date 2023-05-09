@@ -70,7 +70,6 @@ test('dummy returns one', () => {
 })
 
 describe('total likes', () => {
-
   test('of empty list is zero', () => {
     const result = listHelper.totalLikes(emptyBlogList)
     expect(result).toBe(0)
@@ -88,7 +87,6 @@ describe('total likes', () => {
 })
 
 describe('favourite blog', () => {
-
   test('of empty list is null', () => {
     const result = listHelper.favoriteBlog(emptyBlogList)
     expect(result).toBeNull()
@@ -97,18 +95,65 @@ describe('favourite blog', () => {
   test('of a list with only one blog equals that blog', () => {
     const result = listHelper.favoriteBlog(listWithOneBlog)
     expect(result).toEqual(  {
-        title: 'Go To Statement Considered Harmful',
-        author: 'Edsger W. Dijkstra',
-        likes: 5,
-      })
+      title: 'Go To Statement Considered Harmful',
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    })
   })
 
   test('of a bigger list is correct', () => {
     const result = listHelper.favoriteBlog(listWithManyBlogs)
     expect(result).toEqual({
-        title: 'Canonical string reduction',
-        author: 'Edsger W. Dijkstra',
-        likes: 12
-      })
+      title: 'Canonical string reduction',
+      author: 'Edsger W. Dijkstra',
+      likes: 12
+    })
+  })
+})
+
+describe('most blogs', () => {
+  test('of empty list is null', () => {
+    const result = listHelper.mostBlogs(emptyBlogList)
+    expect(result).toBeNull()
+  })
+
+  test('of a list with only one blog equals author of that blog', () => {
+    const result = listHelper.mostBlogs(listWithOneBlog)
+    expect(result).toEqual(  {
+      author: 'Edsger W. Dijkstra',
+      blogs: 1,
+    })
+  })
+
+  test('of a bigger list is correct', () => {
+    const result = listHelper.mostBlogs(listWithManyBlogs)
+    expect(result).toEqual({
+      author: 'Robert C. Martin',
+      blogs: 3
+    })
+  })
+} )
+
+describe('most likes', () => {
+  test('of empty list is null', () => {
+    const result = listHelper.mostLikes(emptyBlogList)
+    expect(result).toBeNull()
+  })
+
+  test('of a list with only one blog equals author of that blog', () => {
+    const result = listHelper.mostLikes(listWithOneBlog)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 5,
+    })
+  })
+
+  test('of a bigger list is correct', () => {
+    const result = listHelper.mostLikes(listWithManyBlogs)
+    console.log(result)
+    expect(result).toEqual({
+      author: 'Edsger W. Dijkstra',
+      likes: 17
+    })
   })
 })
