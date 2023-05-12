@@ -150,7 +150,6 @@ describe('most likes', () => {
 
   test('of a bigger list is correct', () => {
     const result = listHelper.mostLikes(listWithManyBlogs)
-    console.log(result)
     expect(result).toEqual({
       author: 'Edsger W. Dijkstra',
       likes: 17
