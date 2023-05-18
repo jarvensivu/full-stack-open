@@ -26,7 +26,7 @@ describe('reading the blogs', () => {
 
   test('should return blogs with right unique identifier property', async () => {
     const response = await api.get('/api/blogs')
-    response.body.forEach(blog => {
+    response.body.forEach((blog) => {
       expect(blog.id).toBeDefined()
       expect(blog._id).toBeUndefined()
     })
@@ -44,9 +44,13 @@ describe('creating of a new blog', () => {
   })
 
   test('should add a blog with zero likes if the likes property is missing', async () => {
-    const response = await api.post('/api/blogs/').send(helper.newBlogWithoutLikes)
+    const response = await api
+      .post('/api/blogs/')
+      .send(helper.newBlogWithoutLikes)
     const newBlog = response.body
-    expect(lodash.omit(newBlog, 'id', 'likes')).toEqual(helper.newBlogWithoutLikes)
+    expect(lodash.omit(newBlog, 'id', 'likes')).toEqual(
+      helper.newBlogWithoutLikes
+    )
     expect(newBlog.likes).toBe(0)
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
@@ -63,6 +67,42 @@ describe('creating of a new blog', () => {
     await api.post('/api/blogs/').send(helper.blogWithoutUrl).expect(400)
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+  })
+})
+
+describe('updating of a blog', () => {
+  test('should update details of an existing blog successfully', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToBeUpdated = { ...blogsAtStart[0] }
+    blogToBeUpdated.likes++
+
+    await api
+      .put(`/api/blogs/${blogToBeUpdated.id}`)
+      .send(blogToBeUpdated)
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+
+    const updatedBlog = blogsAtEnd.find(
+      (blog) => blog.id === blogToBeUpdated.id
+    )
+    expect(updatedBlog).toEqual(blogToBeUpdated)
+  })
+})
+
+describe('deletion of a blog', () => {
+  test('should succeed with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+    expect(blogsAtEnd).not.toContainEqual(blogToDelete)
   })
 })
 
