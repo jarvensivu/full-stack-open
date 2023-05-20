@@ -11,6 +11,7 @@
   "author": "Juha Järvensivu",
   "dependencies": {
     "@apollo/server": "^4.5.0",
-    "graphql": "^16.6.0"
+    "graphql": "^16.6.0",
+    "uuid": "^9.0.0"
   }
 }
