@@ -57,15 +57,19 @@ const App = () => {
             );
           })
           .catch((error) => {
-            console.log(error);
-            setAllPersons(
-              allPersons.filter((person) => person.id !== result.id)
-            );
-            setNewPerson({ name: "", number: "" });
-            displayNotification(
-              "error",
-              `Information of ${newPerson.name} has already removed from server`
-            );
+            if(error.status === 404){
+              setAllPersons(
+                allPersons.filter((person) => person.id !== result.id)
+              );
+              displayNotification(
+                "error",
+                `Information of ${newPerson.name} has already removed from server`
+              );
+            }
+            else {
+              const errorMessage = error.response.data.error ?? 'unknown error'
+              displayNotification("error", errorMessage);
+            }
           });
       }
     }
