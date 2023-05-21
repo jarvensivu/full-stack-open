@@ -34,7 +34,7 @@ const reducer = (state = initialState, action) => {
         anecdote.id !== id ? anecdote : changedAnecdote
       );
     case "ADD_ANECDOTE":
-      return state.concat(action.payload)
+      return state.concat(action.payload);
     default:
       return state;
   }
