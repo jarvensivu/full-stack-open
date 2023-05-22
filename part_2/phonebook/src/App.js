@@ -17,6 +17,18 @@ const App = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => {
+        setNotification(null);
+      }, 4000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [notification]);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     var result = allPersons.find(
@@ -28,13 +40,16 @@ const App = () => {
         .then((person) => {
           setAllPersons(allPersons.concat(person));
           setNewPerson({ name: "", number: "" });
-          displayNotification(
-            "success",
-            `${person.name} was successfully added`
-          );
+          setNotification({
+            type: "success",
+            text: `${person.name} was successfully added`,
+          });
         })
         .catch((error) => {
-          displayNotification("error", `${error.response.data.error}`);
+          setNotification({
+            type: "error",
+            text: `${error.response.data.error}`,
+          });
         });
     } else {
       if (
@@ -51,24 +66,23 @@ const App = () => {
               )
             );
             setNewPerson({ name: "", number: "" });
-            displayNotification(
-              "success",
-              `${newPerson.name} was successfully updated`
-            );
+            setNotification({
+              type: "success",
+              message: `${newPerson.name} was successfully updated`,
+            });
           })
           .catch((error) => {
-            if(error.status === 404){
+            if (error.status === 404) {
               setAllPersons(
                 allPersons.filter((person) => person.id !== result.id)
               );
-              displayNotification(
-                "error",
-                `Information of ${newPerson.name} has already removed from server`
-              );
-            }
-            else {
-              const errorMessage = error.response.data.error ?? 'unknown error'
-              displayNotification("error", errorMessage);
+              setNotification({
+                type: "error",
+                text: `Information of ${newPerson.name} has already removed from server`,
+              });
+            } else {
+              const errorMessage = error.response.data.error ?? "unknown error";
+              setNotification({ type: "error", text: errorMessage });
             }
           });
       }
@@ -91,16 +105,12 @@ const App = () => {
     if (window.confirm(`Delete ${name}?`)) {
       personService.remove(id).then(() => {
         setAllPersons(allPersons.filter((person) => person.id !== id));
-        displayNotification("success", `${name} was successfully deleted`);
+        setNotification({
+          type: "success",
+          text: `${name} was successfully deleted`,
+        });
       });
     }
-  };
-
-  const displayNotification = (type, text) => {
-    setNotification({ type, text });
-    setTimeout(() => {
-      setNotification(null);
-    }, 4000);
   };
 
   return (
