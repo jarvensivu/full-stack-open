@@ -31,14 +31,14 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    var result = allPersons.find(
+    const result = allPersons.find(
       (person) => person.name === newPerson.name.trim()
     );
-    if (result === undefined) {
+    if (!result) {
       personService
         .create(newPerson)
         .then((person) => {
-          setAllPersons(allPersons.concat(person));
+          setAllPersons((prevPersons) => prevPersons.concat(person));
           setNewPerson({ name: "", number: "" });
           setNotification({
             type: "success",
@@ -48,7 +48,7 @@ const App = () => {
         .catch((error) => {
           setNotification({
             type: "error",
-            text: `${error.response.data.error}`,
+            text: error.response?.data?.error || "unknown error",
           });
         });
     } else {
@@ -60,37 +60,38 @@ const App = () => {
         personService
           .update(result.id, newPerson)
           .then((updatedPerson) => {
-            setAllPersons(
-              allPersons.map((person) =>
+            setAllPersons((prevPersons) =>
+              prevPersons.map((person) =>
                 person.id !== updatedPerson.id ? person : updatedPerson
               )
             );
             setNewPerson({ name: "", number: "" });
             setNotification({
               type: "success",
-              message: `${newPerson.name} was successfully updated`,
+              text: `${newPerson.name} was successfully updated`,
             });
           })
           .catch((error) => {
-            if (error.status === 404) {
-              setAllPersons(
-                allPersons.filter((person) => person.id !== result.id)
+            if (error.response?.status === 404) {
+              setAllPersons((prevPersons) =>
+                prevPersons.filter((person) => person.id !== result.id)
               );
               setNotification({
                 type: "error",
                 text: `Information of ${newPerson.name} has already removed from server`,
               });
             } else {
-              const errorMessage = error.response.data.error ?? "unknown error";
-              setNotification({ type: "error", text: errorMessage });
+              setNotification({
+                type: "error",
+                text: error.response?.data?.error || "unknown error",
+              });
             }
           });
       }
     }
   };
 
-  const handleFormChange = (event) => {
-    const { name, value } = event.target;
+  const handleFormChange = ({ target: { name, value } }) => {
     setNewPerson((newPerson) => ({
       ...newPerson,
       [name]: value,
@@ -104,7 +105,9 @@ const App = () => {
   const handleRemove = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
       personService.remove(id).then(() => {
-        setAllPersons(allPersons.filter((person) => person.id !== id));
+        setAllPersons((prevPersons) =>
+          prevPersons.filter((person) => person.id !== id)
+        );
         setNotification({
           type: "success",
           text: `${name} was successfully deleted`,
