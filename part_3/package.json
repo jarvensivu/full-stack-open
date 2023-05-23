@@ -4,17 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:ui": "rm -rf build && cd ../part_2/phonebook/ && npm run build && cp -r build ../../part_3/build",
+    "build:ui": "rm -rf build && cd ../part_2/phonebook/ && npm run build && cp -r build ../../part_3/frontend",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Juha Järvensivu",
   "license": "ISC",
   "devDependencies": {
+    "eslint": "^8.41.0",
     "nodemon": "^2.0.22"
   },
   "dependencies": {

@@ -1,3 +1,3 @@
-# Full Stack open - Part 3 - Programming a server with NodeJS and Express
+## Full Stack open - Part 3 - Programming a server with NodeJS and Express
 
-In this part I implemented a simple back end application that serves a React front end application that was implemented in part 2. The back end is implemented with Node.js by using the Express library. The application's data is be stored in a MongoDB database. The application is deployed to [Fly.io](https://my-node-react-phonebook-app.fly.dev/).
+In this part, I developed a simple backend for a phonebook application using Node.js and Express.js. The backend is connected to a MongoDB database, where the application data is stored. My phonebook application is deployed to the Fly.io platform, where the backend provides REST endpoints and serves the React frontend I developed in [part 2](../part_2/phonebook/). You can access my phonebook application [here](my-node-react-phonebook-app.fly.dev/).
