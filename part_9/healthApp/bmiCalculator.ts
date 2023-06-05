@@ -27,7 +27,7 @@ const parseArguments = (args: string[]): BmiValues => {
     height: Number(args[2]),
     weight: Number(args[3]),
   };
-}
+};
 
 const calculateBmi = (height: number, weight: number): BmiCategory => {
   const bmi = weight / Math.pow(height / 100, 2);
@@ -42,11 +42,15 @@ const calculateBmi = (height: number, weight: number): BmiCategory => {
   return BmiCategory.ObeseClassIII;
 };
 
-try {
-  const { height, weight } = parseArguments(process.argv);
-  console.log(calculateBmi(height, weight))
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log("Error:", error.message);
+if (require.main === module) {
+  try {
+    const { height, weight } = parseArguments(process.argv);
+    console.log(calculateBmi(height, weight));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log("Error:", error.message);
+    }
   }
 }
+
+export default calculateBmi;

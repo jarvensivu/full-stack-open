@@ -1,0 +1,5 @@
+{
+  "eslint.workingDirectories": [
+    "./part_9/healthApp",
+  ]
+}

@@ -41,7 +41,7 @@ const parseArguments = (args: string[]): ExerciseValues => {
     dailyExerciseHours: processedData.slice(0, -1),
     targetAmount: processedData[processedData.length - 1],
   };
-}
+};
 
 const calculateRating = (average: number, target: number): Rating => {
   if (average < (target / 2)) return Rating.Bad;
@@ -78,15 +78,18 @@ const calculateExercises = (dailyExerciseHours: number[], target: number ): Resu
     ratingDescription,
     target,
     average,
-  }
+  };
 };
 
-
-try {
-  const { dailyExerciseHours, targetAmount } = parseArguments(process.argv);
-  console.log(calculateExercises(dailyExerciseHours, targetAmount));
-} catch (error: unknown) {
-  if (error instanceof Error) {
-    console.log("Error:", error.message);
+if (require.main === module){
+  try {
+    const { dailyExerciseHours, targetAmount } = parseArguments(process.argv);
+    console.log(calculateExercises(dailyExerciseHours, targetAmount));
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.log("Error:", error.message);
+    }
   }
 }
+
+export default calculateExercises;
