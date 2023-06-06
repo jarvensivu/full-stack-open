@@ -2,10 +2,10 @@ import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
 import SetBirthyear from './SetBirthyear'
 
-const Authors = (props) => {
+const Authors = ({ show, setError }) => {
   const { loading, data } = useQuery(ALL_AUTHORS)
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -32,7 +32,7 @@ const Authors = (props) => {
           ))}
         </tbody>
       </table>
-      <SetBirthyear allAuthors={data.allAuthors}/>
+      <SetBirthyear allAuthors={data.allAuthors} setError={setError}/>
     </div>
   )
 }

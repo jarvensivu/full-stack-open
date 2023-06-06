@@ -3,12 +3,16 @@ import Select from 'react-select'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries';
 
-const SetBirthyear = ({ allAuthors }) => {
+const SetBirthyear = ({ allAuthors, setError }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [born, setBorn] = useState('')
 
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [ { query: ALL_AUTHORS } ]
+    refetchQueries: [ { query: ALL_AUTHORS } ],
+    onError: (error) => {
+      const messages = error.graphQLErrors[0].message
+      setError(messages)
+    }
   }) 
 
   const options = allAuthors.map((author) => {
