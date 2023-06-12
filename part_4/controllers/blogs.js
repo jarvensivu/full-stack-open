@@ -1,7 +1,6 @@
-const jwt = require('jsonwebtoken')
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
+const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog
@@ -10,14 +9,12 @@ blogsRouter.get('/', async (request, response) => {
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
+blogsRouter.post('/', userExtractor, async (request, response) => {
+  const { user } = request
 
-  if (!decodedToken.id) {
+  if (!user) {
     return response.status(401).json({ error: 'token invalid' })
   }
-
-  const user = await User.findById(decodedToken.id)
 
   const { title, author, url, likes } = request.body
 
@@ -52,9 +49,23 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(updatedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
-  await Blog.findByIdAndRemove(request.params.id)
-  response.status(204).end()
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const { user } = request
+
+  if (!user) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const blog = await Blog.findById(request.params.id)
+
+  if ( blog?.user.toString() === user._id.toString() ){
+    await Blog.findByIdAndRemove(request.params.id)
+    response.status(204).end()
+  }
+  else{
+    response.status(401).json({ error: 'unauthorized access' })
+  }
+
 })
 
 module.exports = blogsRouter

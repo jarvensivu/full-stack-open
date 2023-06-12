@@ -8,7 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
-    "test": "cross-env NODE_ENV=test jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Juha Järvensivu",
   "license": "ISC",

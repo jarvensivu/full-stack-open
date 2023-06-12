@@ -1,14 +1,17 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const lodash = require('lodash')
 const app = require('../app')
 const api = supertest(app)
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+  await User.insertMany([])
+  await helper.addLoginUser()
 })
 
 describe('reading the blogs', () => {
@@ -35,38 +38,44 @@ describe('reading the blogs', () => {
 
 describe('creating of a new blog', () => {
   test('should add one blog that has the right content', async () => {
-    const response = await api.post('/api/blogs').send(helper.newBlog)
+    const blogsAtStart = await helper.blogsInDb()
+    const loggedUser = await api.post('/api/login').send(helper.loginUser)
+    const response = await api.post('/api/blogs').set('Authorization', `Bearer ${loggedUser.body.token}`).send(helper.newBlog)
     const newBlog = response.body
-    expect(lodash.omit(newBlog, 'id')).toEqual(helper.newBlog)
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-    expect(blogsAtEnd).toContainEqual(newBlog)
+
+    expect(newBlog.title).toEqual(helper.newBlog.title)
+    expect(newBlog.author).toEqual(helper.newBlog.author)
+    expect(newBlog.url).toEqual(helper.newBlog.url)
+    expect(newBlog.user.username).toEqual(loggedUser.body.username)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
   })
 
   test('should add a blog with zero likes if the likes property is missing', async () => {
-    const response = await api
-      .post('/api/blogs/')
-      .send(helper.newBlogWithoutLikes)
+    const blogsAtStart = await helper.blogsInDb()
+    const loggedUser = await api.post('/api/login').send(helper.loginUser)
+    const response = await api.post('/api/blogs').set('Authorization', `Bearer ${loggedUser.body.token}`).send(helper.newBlogWithoutLikes)
     const newBlog = response.body
-    expect(lodash.omit(newBlog, 'id', 'likes')).toEqual(
-      helper.newBlogWithoutLikes
-    )
-    expect(newBlog.likes).toBe(0)
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
-    expect(blogsAtEnd).toContainEqual(newBlog)
+
+    expect(newBlog.likes).toBe(0)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
   })
 
   test('should fail if the title property is missing', async () => {
-    await api.post('/api/blogs/').send(helper.blogWithoutTitle).expect(400)
+    const blogsAtStart = await helper.blogsInDb()
+    const loggedUser = await api.post('/api/login').send(helper.loginUser)
+    await api.post('/api/blogs/').set('Authorization', `Bearer ${loggedUser.body.token}`).send(helper.blogWithoutTitle).expect(400)
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 
   test('should fail if the url property is missing', async () => {
-    await api.post('/api/blogs/').send(helper.blogWithoutUrl).expect(400)
+    const blogsAtStart = await helper.blogsInDb()
+    const loggedUser = await api.post('/api/login').send(helper.loginUser)
+    await api.post('/api/blogs/').set('Authorization', `Bearer ${loggedUser.body.token}`).send(helper.blogWithoutUrl).expect(400)
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length)
   })
 })
 
@@ -94,15 +103,15 @@ describe('updating of a blog', () => {
 describe('deletion of a blog', () => {
   test('should succeed with status code 204 if id is valid', async () => {
     const blogsAtStart = await helper.blogsInDb()
-    const blogToDelete = blogsAtStart[0]
+    const loggedUser = await api.post('/api/login').send(helper.loginUser)
+    const response = await api.post('/api/blogs').set('authorization', `Bearer ${loggedUser.body.token}`).send(helper.newBlog)
+    const blogsAfterAddition = await helper.blogsInDb()
 
-    await api.delete(`/api/blogs/${blogToDelete.id}`).expect(204)
-
+    await api.delete(`/api/blogs/${response.body.id}`).set('authorization', `Bearer ${loggedUser.body.token}`).expect(204)
     const blogsAtEnd = await helper.blogsInDb()
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
-
-    expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+    expect(blogsAfterAddition).toHaveLength(blogsAtStart.length + 1)
+    expect(blogsAtEnd).toHaveLength(blogsAfterAddition.length - 1)
   })
 })
 
