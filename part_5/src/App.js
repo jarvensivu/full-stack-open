@@ -53,8 +53,10 @@ const App = () => {
         'success'
       )
       blogFormRef.current.toggleVisibility()
+      return true
     } catch (error) {
       handleError(error)
+      return false
     }
   }
 
