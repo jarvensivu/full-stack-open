@@ -1,42 +1,21 @@
 import { useMutation, useQueryClient } from 'react-query'
 import anecdoteService from "../services/anecdotes"
-import { useNotificationDispatch } from "../context/NotificationsContext"
+import { useNotificationHandler } from "../context/NotificationsContext"
 
 const AnecdoteForm = () => {
   const queryClient = useQueryClient()
-  const dispatch = useNotificationDispatch()
+  const notificationHandler = useNotificationHandler()
 
   const newAnecdoteMutation = useMutation(anecdoteService.createAnecdote, {
     onSuccess: (newAnecdote) => {
       const anecdotes = queryClient.getQueryData('anecdotes')
       queryClient.setQueryData('anecdotes', anecdotes.concat(newAnecdote))
       const id = Math.floor(Math.random() * 1000000)
-      console.log('newAnecdote', newAnecdote)
-      dispatch({
-        type: 'ADD',
-        payload: { content: `you created '${newAnecdote.content}'`, id }
-      })
-      setTimeout(() => {
-        dispatch({
-          type: "REMOVE",
-          payload: { id }
-        })
-        }, 5000
-      )
+      notificationHandler({ content: `you created '${newAnecdote.content}'`, id })
     },
     onError: (error) => {
       const id = Math.floor(Math.random() * 1000000)
-      dispatch({
-        type: 'ADD',
-        payload: { content: error.response.data.error, id }
-      })
-      setTimeout(() => {
-        dispatch({
-          type: "REMOVE",
-          payload: { id }
-        })
-        }, 5000
-      )
+      notificationHandler({ content: error.response.data.error, id })
     }
   })
 

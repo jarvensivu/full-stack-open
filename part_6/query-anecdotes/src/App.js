@@ -2,11 +2,11 @@ import { useQuery, useMutation, useQueryClient } from "react-query";
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notifications from "./components/Notifications";
 import anecdoteService from "./services/anecdotes";
-import { useNotificationDispatch } from "./context/NotificationsContext";
+import { useNotificationHandler } from "./context/NotificationsContext";
 
 const App = () => {
   const queryClient = useQueryClient()
-  const dispatch = useNotificationDispatch()
+  const notificationHandler = useNotificationHandler()
 
   const updateAnecdoteMutation = useMutation(anecdoteService.updateAnecdote, {
     onSuccess: (updatedAnecdote) => {
@@ -18,17 +18,7 @@ const App = () => {
         )
       )
       const id = Math.floor(Math.random() * 1000000)
-      dispatch({
-        type: "ADD",
-        payload: { content: `you voted '${updatedAnecdote.content}'`, id }
-      })
-      setTimeout(() => {
-        dispatch({
-          type: "REMOVE",
-          payload: { id }
-        })
-        }, 5000
-      )
+      notificationHandler({ content: `you voted '${updatedAnecdote.content}'`, id })
     }
   })
 

@@ -28,9 +28,15 @@ export const useNotifications = () => {
   return notificationsAndDispatch[0]
 }
 
-export const useNotificationDispatch = () => {
+export const useNotificationHandler = () => {
   const notificationsAndDispatch = useContext(NotificationsContext)
-  return notificationsAndDispatch[1]
+  const dispatch = notificationsAndDispatch[1]
+  return (payload) => {
+    dispatch({ type: "ADD", payload })
+    setTimeout(() => {
+      dispatch({ type: "REMOVE", payload })
+    }, 5000)
+  }
 }
 
 export default NotificationsContext
