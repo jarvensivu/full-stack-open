@@ -1,18 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
+import Notifications from './components/Notifications'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setNotification } from './components/reducers/notificationsReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [notification, setNotification] = useState(null)
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
+  const dispatch = useDispatch()
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
@@ -48,9 +50,11 @@ const App = () => {
     try {
       const addedBlog = await blogService.create(newBlog)
       setBlogs(blogs.concat(addedBlog))
-      handleNotification(
-        `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
-        'success'
+      dispatch(
+        setNotification(
+          `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
+          'success'
+        )
       )
       blogFormRef.current.toggleVisibility()
       return true
@@ -84,7 +88,9 @@ const App = () => {
     try {
       await blogService.remove(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
-      handleNotification(`blog ${title} by ${author} was deleted`, 'success')
+      dispatch(
+        setNotification(`blog ${title} by ${author} was deleted`, 'success')
+      )
     } catch (error) {
       handleError(error)
     }
@@ -94,18 +100,11 @@ const App = () => {
     return blogs.sort((a, b) => b.likes - a.likes)
   }
 
-  const handleNotification = (message, type) => {
-    setNotification({ message, type })
-    setTimeout(() => {
-      setNotification(null)
-    }, 4000)
-  }
-
   const handleError = (error) => {
     if (error.response.data.error) {
-      handleNotification(error.response.data.error, 'error')
+      dispatch(setNotification(error.response.data.error, 'error'))
     } else {
-      handleNotification('unknown error', 'error')
+      dispatch(setNotification('unknown error', 'error'))
     }
   }
 
@@ -114,13 +113,13 @@ const App = () => {
       {!user ? (
         <>
           <h2>Log in to application</h2>
-          <Notification notification={notification} />
+          <Notifications />
           <LoginForm loginUser={loginUser} />
         </>
       ) : (
         <>
           <h2>blogs</h2>
-          <Notification notification={notification} />
+          <Notifications />
           <p>
             {user.name} logged in
             <button onClick={logOutUser}>Logout</button>
