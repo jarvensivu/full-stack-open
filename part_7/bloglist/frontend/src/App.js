@@ -91,7 +91,7 @@ const App = () => {
   }
 
   const sortBlogs = (blogs) => {
-    return blogs.toSorted((a, b) => b.likes - a.likes)
+    return blogs.sort((a, b) => b.likes - a.likes)
   }
 
   const handleNotification = (message, type) => {
