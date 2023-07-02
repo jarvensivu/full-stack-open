@@ -8,17 +8,22 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './components/reducers/notificationsReducer'
+import {
+  createBlog,
+  increaseLikes,
+  initializeBlogs,
+  removeBlog,
+} from './components/reducers/blogsReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
 
   const blogFormRef = useRef()
   const dispatch = useDispatch()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -48,11 +53,10 @@ const App = () => {
 
   const addBlog = async (newBlog) => {
     try {
-      const addedBlog = await blogService.create(newBlog)
-      setBlogs(blogs.concat(addedBlog))
+      dispatch(createBlog(newBlog))
       dispatch(
         setNotification(
-          `a new blog ${addedBlog.title} by ${addedBlog.author} added`,
+          `a new blog ${newBlog.title} by ${newBlog.author} added`,
           'success'
         )
       )
@@ -65,20 +69,8 @@ const App = () => {
   }
 
   const updateLikes = async (blog) => {
-    const { id, title, author, url, likes } = blog
     try {
-      const updatedBlog = await blogService.update({
-        id,
-        title,
-        author,
-        url,
-        likes: likes + 1,
-      })
-      setBlogs(
-        sortBlogs(
-          blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
-        )
-      )
+      dispatch(increaseLikes(blog))
     } catch (error) {
       handleError(error)
     }
@@ -86,18 +78,13 @@ const App = () => {
 
   const deleteBlog = async ({ id, title, author }) => {
     try {
-      await blogService.remove(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
+      dispatch(removeBlog(id))
       dispatch(
         setNotification(`blog ${title} by ${author} was deleted`, 'success')
       )
     } catch (error) {
       handleError(error)
     }
-  }
-
-  const sortBlogs = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes)
   }
 
   const handleError = (error) => {
@@ -129,7 +116,6 @@ const App = () => {
           </Togglable>
           <br />
           <BlogList
-            blogs={blogs}
             updateLikes={updateLikes}
             deleteBlog={deleteBlog}
             user={user}
