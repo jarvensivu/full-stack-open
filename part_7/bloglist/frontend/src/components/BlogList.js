@@ -5,7 +5,13 @@ const BlogList = ({ blogs, updateLikes, deleteBlog, user }) => {
   return (
     <div>
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} updateLikes={updateLikes} deleteBlog={deleteBlog} user={user}/>
+        <Blog
+          key={blog.id}
+          blog={blog}
+          updateLikes={updateLikes}
+          deleteBlog={deleteBlog}
+          user={user}
+        />
       ))}
     </div>
   )

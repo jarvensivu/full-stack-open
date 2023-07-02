@@ -40,19 +40,19 @@ describe('Blog app', function () {
     })
   })
 
-  describe('When logged in', function() {
+  describe('When logged in', function () {
     const firstBlog = {
       title: 'First Title',
       author: 'First Author',
       url: 'http://firstblog.com',
-      likes: 2
+      likes: 2,
     }
 
     const secondBlog = {
       title: 'Second Title',
       author: 'Second Author',
       url: 'http://secondblog.com',
-      likes: 1
+      likes: 1,
     }
 
     const thirdBlog = {
@@ -62,11 +62,11 @@ describe('Blog app', function () {
       likes: 3,
     }
 
-    beforeEach(function() {
+    beforeEach(function () {
       cy.login({ username: testUser.username, password: testUser.password })
     })
 
-    it('A blog can be created', function() {
+    it('A blog can be created', function () {
       const testBlog = {
         title: 'Test Title',
         author: 'Test Author',
@@ -83,14 +83,14 @@ describe('Blog app', function () {
       cy.contains(`${testBlog.title} ${testBlog.author}`)
     })
 
-    it('A blog can be liked', function() {
+    it('A blog can be liked', function () {
       cy.createBlog(firstBlog)
       cy.get('#toggle-visibility-button').click()
       cy.get('#likes-button').click()
       cy.contains('likes 3')
     })
 
-    it('A blog can be deleted by the creator of the blog', function() {
+    it('A blog can be deleted by the creator of the blog', function () {
       cy.createBlog(thirdBlog)
       cy.get('#toggle-visibility-button').click()
       cy.get('#remove-button').click()
@@ -98,7 +98,7 @@ describe('Blog app', function () {
       cy.contains(`${thirdBlog.title} ${thirdBlog.author}`).should('not.exist')
     })
 
-    it('Only creator of the blog can see the remove button of the blog', function() {
+    it('Only creator of the blog can see the remove button of the blog', function () {
       cy.createBlog(firstBlog)
       cy.contains('First Title First Author')
       cy.get('#toggle-visibility-button').click()
@@ -110,13 +110,16 @@ describe('Blog app', function () {
         password: 'secret',
       }
       cy.request('POST', `${Cypress.env('BACKEND')}/users`, anotherUser)
-      cy.login({ username: anotherUser.username, password: anotherUser.password })
+      cy.login({
+        username: anotherUser.username,
+        password: anotherUser.password,
+      })
       cy.contains('First Title First Author')
       cy.get('#toggle-visibility-button').click()
       cy.get('#remove-button').should('not.exist')
     })
 
-    it('Blogs are in descending order according to likes', function() {
+    it('Blogs are in descending order according to likes', function () {
       cy.createBlog(firstBlog)
       cy.createBlog(secondBlog)
       cy.createBlog(thirdBlog)

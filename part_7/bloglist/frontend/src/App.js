@@ -71,7 +71,9 @@ const App = () => {
         likes: likes + 1,
       })
       setBlogs(
-        sortBlogs(blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog)))
+        sortBlogs(
+          blogs.map((blog) => (blog.id === updatedBlog.id ? updatedBlog : blog))
+        )
       )
     } catch (error) {
       handleError(error)
@@ -127,7 +129,12 @@ const App = () => {
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <br />
-          <BlogList blogs={blogs} updateLikes={updateLikes} deleteBlog={deleteBlog} user={user}/>
+          <BlogList
+            blogs={blogs}
+            updateLikes={updateLikes}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         </>
       )}
     </div>

@@ -15,7 +15,7 @@ describe('<Blog />', () => {
     user: {
       username: 'test.user@test.com',
       name: 'Test User',
-    }
+    },
   }
 
   const user = {
@@ -27,7 +27,14 @@ describe('<Blog />', () => {
   const deleteBlogMock = jest.fn()
 
   beforeEach(() => {
-    component = render(<Blog blog={blog} updateLikes={updateLikesMock} user={user} deleteBlog={deleteBlogMock}/>)
+    component = render(
+      <Blog
+        blog={blog}
+        updateLikes={updateLikesMock}
+        user={user}
+        deleteBlog={deleteBlogMock}
+      />
+    )
   })
 
   test('should show title and author but not url and likes by default', () => {
@@ -54,6 +61,4 @@ describe('<Blog />', () => {
     await user.dblClick(likeButton)
     expect(updateLikesMock.mock.calls).toHaveLength(2)
   })
-
 })
-

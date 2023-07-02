@@ -10,7 +10,7 @@ describe('<BlogForm />', () => {
     const newBlog = {
       title: 'Test Title',
       author: 'Test Author',
-      url: 'http://test.com'
+      url: 'http://test.com',
     }
 
     const user = userEvent.setup()
