@@ -7,7 +7,8 @@ module.exports = {
   },
   "extends": [ 
       "eslint:recommended",
-      "plugin:react/recommended"
+      "plugin:react/recommended",
+      "prettier"
   ],
   "parserOptions": {
       "ecmaFeatures": {
@@ -17,7 +18,7 @@ module.exports = {
       "sourceType": "module"
   },
   "plugins": [
-      "react", "jest", "cypress"
+      "react", "jest", "cypress", "prettier"
   ],
   "rules": {
       "indent": [
@@ -46,7 +47,8 @@ module.exports = {
       ],
       "no-console": 0,
       "react/prop-types": 0,
-      "react/react-in-jsx-scope": "off"
+      "react/react-in-jsx-scope": "off",
+      "prettier/prettier": "error"
   },
   "settings": {
     "react": {
