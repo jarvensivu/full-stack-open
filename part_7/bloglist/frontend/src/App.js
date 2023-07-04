@@ -7,13 +7,13 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { setNotification } from './components/reducers/notificationsReducer'
+import { setNotification } from './reducers/notificationsReducer'
 import {
   createBlog,
   increaseLikes,
   initializeBlogs,
   removeBlog,
-} from './components/reducers/blogsReducer'
+} from './reducers/blogsReducer'
 
 const App = () => {
   const [user, setUser] = useState(null)

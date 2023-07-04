@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
-import blogService from '../../services/blogs'
-import { sortBlogs } from '../../utils'
+import blogService from '../services/blogs'
+import { sortBlogs } from '../utils'
 
 export const createBlog = (content) => {
   return async (dispatch) => {
