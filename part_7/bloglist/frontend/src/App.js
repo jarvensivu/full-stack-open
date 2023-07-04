@@ -14,6 +14,7 @@ import {
   initializeBlogs,
   removeBlog,
 } from './reducers/blogsReducer'
+import { parseError } from './utils'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -41,7 +42,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUser(user)
     } catch (error) {
-      handleError(error)
+      dispatch(setNotification(parseError(error), 'error'))
     }
   }
 
@@ -63,7 +64,7 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       return true
     } catch (error) {
-      handleError(error)
+      dispatch(setNotification(parseError(error), 'error'))
       return false
     }
   }
@@ -72,7 +73,7 @@ const App = () => {
     try {
       dispatch(increaseLikes(blog))
     } catch (error) {
-      handleError(error)
+      dispatch(setNotification(parseError(error), 'error'))
     }
   }
 
@@ -83,15 +84,7 @@ const App = () => {
         setNotification(`blog ${title} by ${author} was deleted`, 'success')
       )
     } catch (error) {
-      handleError(error)
-    }
-  }
-
-  const handleError = (error) => {
-    if (error.response.data.error) {
-      dispatch(setNotification(error.response.data.error, 'error'))
-    } else {
-      dispatch(setNotification('unknown error', 'error'))
+      dispatch(setNotification(parseError(error), 'error'))
     }
   }
 
