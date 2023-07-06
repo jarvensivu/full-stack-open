@@ -8,12 +8,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/notificationsReducer'
-import {
-  createBlog,
-  increaseLikes,
-  initializeBlogs,
-  removeBlog,
-} from './reducers/blogsReducer'
+import { createBlog, initializeBlogs } from './reducers/blogsReducer'
 import { parseError } from './utils'
 
 const App = () => {
@@ -69,25 +64,6 @@ const App = () => {
     }
   }
 
-  const updateLikes = async (blog) => {
-    try {
-      dispatch(increaseLikes(blog))
-    } catch (error) {
-      dispatch(setNotification(parseError(error), 'error'))
-    }
-  }
-
-  const deleteBlog = async ({ id, title, author }) => {
-    try {
-      dispatch(removeBlog(id))
-      dispatch(
-        setNotification(`blog ${title} by ${author} was deleted`, 'success')
-      )
-    } catch (error) {
-      dispatch(setNotification(parseError(error), 'error'))
-    }
-  }
-
   return (
     <div>
       {!user ? (
@@ -108,11 +84,7 @@ const App = () => {
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <br />
-          <BlogList
-            updateLikes={updateLikes}
-            deleteBlog={deleteBlog}
-            user={user}
-          />
+          <BlogList user={user} />
         </>
       )}
     </div>
