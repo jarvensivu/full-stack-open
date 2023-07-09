@@ -1,39 +1,24 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
-import { increaseLikes, removeBlog } from '../reducers/blogsReducer'
-import { setNotification } from '../reducers/notificationsReducer'
-import { parseErrorMessage } from '../utils'
+import { increaseLikes, deleteBlog } from '../reducers/blogsReducer'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const [showDetails, setShowDetails] = useState(false)
   const dispatch = useDispatch()
+  const loggedUser = useSelector((state) => state.login)
 
   const toggleVisibility = () => {
     setShowDetails(!showDetails)
   }
 
-  const handleUpdateLikes = async () => {
-    try {
-      dispatch(increaseLikes(blog))
-    } catch (error) {
-      dispatch(setNotification(parseErrorMessage(error), 'error'))
-    }
+  const handleIncreaseLikes = async () => {
+    dispatch(increaseLikes(blog))
   }
 
   const handleDeleteBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      try {
-        dispatch(removeBlog(blog.id))
-        dispatch(
-          setNotification(
-            `blog ${blog.title} by ${blog.author} was deleted`,
-            'success'
-          )
-        )
-      } catch (error) {
-        dispatch(setNotification(parseErrorMessage(error), 'error'))
-      }
+      dispatch(deleteBlog(blog))
     }
   }
 
@@ -61,12 +46,12 @@ const Blog = ({ blog, user }) => {
           <a href={blog.url}>{blog.url}</a>
           <div>
             likes {blog.likes}
-            <button id="likes-button" onClick={() => handleUpdateLikes(blog)}>
+            <button id="likes-button" onClick={() => handleIncreaseLikes(blog)}>
               like
             </button>
           </div>
           <div>{blog.user.name}</div>
-          {blog.user.username === user.username && (
+          {blog.user.username === loggedUser.username && (
             <div>
               <button id="remove-button" onClick={handleDeleteBlog}>
                 remove
@@ -81,8 +66,6 @@ const Blog = ({ blog, user }) => {
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  deleteBlog: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
 }
 
 export default Blog

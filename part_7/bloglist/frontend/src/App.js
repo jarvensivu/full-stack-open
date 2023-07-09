@@ -5,12 +5,11 @@ import BlogForm from './components/BlogForm'
 import Notifications from './components/Notifications'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import User from './components/User'
 import blogService from './services/blogs'
 import storageService from './services/storage'
-import { setNotification } from './reducers/notificationsReducer'
 import { createBlog, initializeBlogs } from './reducers/blogsReducer'
-import { logIn, removeCurrentUser } from './reducers/loginReducer'
-import { parseErrorMessage } from './utils'
+import { logIn } from './reducers/loginReducer'
 
 const App = () => {
   const blogFormRef = useRef()
@@ -29,25 +28,10 @@ const App = () => {
     }
   }, [])
 
-  const logOutUser = () => {
-    dispatch(removeCurrentUser())
-  }
-
   const addBlog = async (newBlog) => {
-    try {
-      dispatch(createBlog(newBlog))
-      dispatch(
-        setNotification(
-          `a new blog ${newBlog.title} by ${newBlog.author} added`,
-          'success'
-        )
-      )
-      blogFormRef.current.toggleVisibility()
-      return true
-    } catch (error) {
-      dispatch(setNotification(parseErrorMessage(error), 'error'))
-      return false
-    }
+    const success = dispatch(createBlog(newBlog))
+    blogFormRef.current.toggleVisibility()
+    return success
   }
 
   return (
@@ -63,14 +47,13 @@ const App = () => {
           <h2>blogs</h2>
           <Notifications />
           <p>
-            {loggedUser.name} logged in
-            <button onClick={logOutUser}>Logout</button>
+            <User loggedUser={loggedUser} />
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <br />
-          <BlogList user={loggedUser} />
+          <BlogList />
         </>
       )}
     </div>

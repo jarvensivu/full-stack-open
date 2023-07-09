@@ -1,28 +1,55 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
-import { sortBlogs } from '../utils'
+import { setNotification } from './notificationsReducer'
+import { sortBlogs, parseErrorMessage } from '../utils'
 
 export const createBlog = (content) => {
   return async (dispatch) => {
-    const newAnecdote = await blogService.create({ ...content, votes: 0 })
-    dispatch(addBlog(newAnecdote))
+    try {
+      const newBlog = await blogService.create(content)
+      dispatch(addBlog(newBlog))
+      dispatch(
+        setNotification(
+          `a new blog ${newBlog.title} by ${newBlog.author} added`,
+          'success'
+        )
+      )
+      return true
+    } catch (error) {
+      dispatch(setNotification(parseErrorMessage(error), 'error'))
+      return false
+    }
   }
 }
 
-export const deleteBlog = (id) => {
+export const deleteBlog = (blog) => {
   return async (dispatch) => {
-    await blogService.remove(id)
-    dispatch(removeBlog(id))
+    try {
+      await blogService.remove(blog.id)
+      dispatch(removeBlog(blog.id))
+      dispatch(
+        setNotification(
+          `blog ${blog.title} by ${blog.author} was deleted`,
+          'success'
+        )
+      )
+    } catch (error) {
+      dispatch(setNotification(parseErrorMessage(error), 'error'))
+    }
   }
 }
 
 export const increaseLikes = (blog) => {
   return async (dispatch) => {
-    const updatedBlog = await blogService.update({
-      ...blog,
-      likes: blog.likes + 1,
-    })
-    dispatch(addLike(updatedBlog.id))
+    try {
+      const updatedBlog = await blogService.update({
+        ...blog,
+        likes: blog.likes + 1,
+      })
+      dispatch(addLike(updatedBlog.id))
+    } catch (error) {
+      dispatch(setNotification(parseErrorMessage(error), 'error'))
+    }
   }
 }
 
