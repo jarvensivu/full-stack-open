@@ -1,50 +1,36 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import Notifications from './components/Notifications'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
-import loginService from './services/login'
+import storageService from './services/storage'
 import { setNotification } from './reducers/notificationsReducer'
 import { createBlog, initializeBlogs } from './reducers/blogsReducer'
-import { parseError } from './utils'
+import { logIn, removeCurrentUser } from './reducers/loginReducer'
+import { parseErrorMessage } from './utils'
 
 const App = () => {
-  const [user, setUser] = useState(null)
-
   const blogFormRef = useRef()
   const dispatch = useDispatch()
+  const loggedUser = useSelector((state) => state.login)
 
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
+    const user = storageService.loadUser()
+    if (user) {
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(logIn(user))
     }
   }, [])
 
-  const loginUser = async (loginCredentials) => {
-    try {
-      const user = await loginService.login(loginCredentials)
-      window.localStorage.setItem('loggedBlogAppUser', JSON.stringify(user))
-      blogService.setToken(user.token)
-      setUser(user)
-    } catch (error) {
-      dispatch(setNotification(parseError(error), 'error'))
-    }
-  }
-
   const logOutUser = () => {
-    window.localStorage.removeItem('loggedBlogAppUser')
-    setUser(null)
-    blogService.setToken(null)
+    dispatch(removeCurrentUser())
   }
 
   const addBlog = async (newBlog) => {
@@ -59,32 +45,32 @@ const App = () => {
       blogFormRef.current.toggleVisibility()
       return true
     } catch (error) {
-      dispatch(setNotification(parseError(error), 'error'))
+      dispatch(setNotification(parseErrorMessage(error), 'error'))
       return false
     }
   }
 
   return (
     <div>
-      {!user ? (
+      {!loggedUser ? (
         <>
           <h2>Log in to application</h2>
           <Notifications />
-          <LoginForm loginUser={loginUser} />
+          <LoginForm />
         </>
       ) : (
         <>
           <h2>blogs</h2>
           <Notifications />
           <p>
-            {user.name} logged in
+            {loggedUser.name} logged in
             <button onClick={logOutUser}>Logout</button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm addBlog={addBlog} />
           </Togglable>
           <br />
-          <BlogList user={user} />
+          <BlogList user={loggedUser} />
         </>
       )}
     </div>

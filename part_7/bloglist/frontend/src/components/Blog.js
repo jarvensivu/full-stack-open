@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { increaseLikes, removeBlog } from '../reducers/blogsReducer'
 import { setNotification } from '../reducers/notificationsReducer'
-import { parseError } from '../utils'
+import { parseErrorMessage } from '../utils'
 
 const Blog = ({ blog, user }) => {
   const [showDetails, setShowDetails] = useState(false)
@@ -17,7 +17,7 @@ const Blog = ({ blog, user }) => {
     try {
       dispatch(increaseLikes(blog))
     } catch (error) {
-      dispatch(setNotification(parseError(error), 'error'))
+      dispatch(setNotification(parseErrorMessage(error), 'error'))
     }
   }
 
@@ -32,7 +32,7 @@ const Blog = ({ blog, user }) => {
           )
         )
       } catch (error) {
-        dispatch(setNotification(parseError(error), 'error'))
+        dispatch(setNotification(parseErrorMessage(error), 'error'))
       }
     }
   }

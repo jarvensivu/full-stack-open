@@ -1,14 +1,18 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { setCurrentUser } from '../reducers/loginReducer'
 
-const LoginForm = ({ loginUser }) => {
+const LoginForm = () => {
   const [loginCredentials, setLoginCredentials] = useState({
     username: '',
     password: '',
   })
 
+  const dispatch = useDispatch()
+
   const handleLoginSubmit = async (event) => {
     event.preventDefault()
-    const success = await loginUser(loginCredentials)
+    const success = dispatch(setCurrentUser(loginCredentials))
     if (success) setLoginCredentials({ username: '', password: '' })
   }
 

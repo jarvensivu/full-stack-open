@@ -13,6 +13,6 @@ My exercise solutions for [Full Stack open](https://fullstackopen.com/) course
 | [4](./part_4/) | Done        | 23/23     |
 | [5](./part_5/) | Done        | 23/23     |
 | [6](./part_6/) | Done        | 24/24     |
-| [7](./part_7/) | In Progress | 12/21     |
+| [7](./part_7/) | In Progress | 13/21     |
 | [8](./part_8/) | In Progress | 12/26     |
 | [9](./part_9/) | In Progress | 13/29     |
