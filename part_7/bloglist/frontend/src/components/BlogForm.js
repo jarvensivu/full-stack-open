@@ -1,11 +1,14 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { createBlog } from '../reducers/blogsReducer'
 
-const BlogForm = ({ addBlog }) => {
+const BlogForm = ({ toggleFormVisibility }) => {
   const [newBlog, setNewBlog] = useState({
     title: '',
     author: '',
     url: '',
   })
+  const dispatch = useDispatch()
 
   const handleFormChange = (event) => {
     const { name, value } = event.target
@@ -17,8 +20,11 @@ const BlogForm = ({ addBlog }) => {
 
   const handleBlogSubmit = async (event) => {
     event.preventDefault()
-    const success = await addBlog(newBlog)
-    if (success) setNewBlog({ title: '', author: '', url: '' })
+    const success = dispatch(createBlog(newBlog))
+    if (success) {
+      setNewBlog({ title: '', author: '', url: '' })
+      toggleFormVisibility()
+    }
   }
 
   return (

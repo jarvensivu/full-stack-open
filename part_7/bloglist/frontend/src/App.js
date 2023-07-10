@@ -8,7 +8,7 @@ import Togglable from './components/Togglable'
 import User from './components/User'
 import blogService from './services/blogs'
 import storageService from './services/storage'
-import { createBlog, initializeBlogs } from './reducers/blogsReducer'
+import { initializeBlogs } from './reducers/blogsReducer'
 import { logIn } from './reducers/loginReducer'
 
 const App = () => {
@@ -28,10 +28,8 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = async (newBlog) => {
-    const success = dispatch(createBlog(newBlog))
+  const toggleFormVisibility = () => {
     blogFormRef.current.toggleVisibility()
-    return success
   }
 
   return (
@@ -50,7 +48,7 @@ const App = () => {
             <User loggedUser={loggedUser} />
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm addBlog={addBlog} />
+            <BlogForm toggleFormVisibility={toggleFormVisibility} />
           </Togglable>
           <br />
           <BlogList />
