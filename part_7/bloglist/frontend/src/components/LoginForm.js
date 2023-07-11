@@ -12,8 +12,8 @@ const LoginForm = () => {
 
   const handleLoginSubmit = async (event) => {
     event.preventDefault()
-    const success = dispatch(setCurrentUser(loginCredentials))
-    if (success) setLoginCredentials({ username: '', password: '' })
+    dispatch(setCurrentUser(loginCredentials))
+    setLoginCredentials({ username: '', password: '' })
   }
 
   const handleCredentialsChange = (event) => {

@@ -20,7 +20,7 @@ const BlogForm = ({ toggleFormVisibility }) => {
 
   const handleBlogSubmit = async (event) => {
     event.preventDefault()
-    const success = dispatch(createBlog(newBlog))
+    const success = await dispatch(createBlog(newBlog))
     if (success) {
       setNewBlog({ title: '', author: '', url: '' })
       toggleFormVisibility()
@@ -29,7 +29,7 @@ const BlogForm = ({ toggleFormVisibility }) => {
 
   return (
     <>
-      <h2>create new</h2>
+      <h3>create new</h3>
       <form id="form" onSubmit={handleBlogSubmit}>
         <div>
           title:

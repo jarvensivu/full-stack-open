@@ -1,16 +1,15 @@
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useParams, useNavigate } from 'react-router-dom'
 import { increaseLikes, deleteBlog } from '../reducers/blogsReducer'
 
-const Blog = ({ blog }) => {
-  const [showDetails, setShowDetails] = useState(false)
+const Blog = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const { id } = useParams()
   const loggedUser = useSelector((state) => state.login)
-
-  const toggleVisibility = () => {
-    setShowDetails(!showDetails)
-  }
+  const blog = useSelector((state) =>
+    state.blogs.find((blog) => blog.id === id)
+  )
 
   const handleIncreaseLikes = async () => {
     dispatch(increaseLikes(blog))
@@ -19,53 +18,36 @@ const Blog = ({ blog }) => {
   const handleDeleteBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
       dispatch(deleteBlog(blog))
+      navigate('/')
     }
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
+  if (!blog) {
+    return null
   }
 
   return (
-    <div className="blog" style={blogStyle}>
+    <div className="blog">
+      <h3>
+        {blog.title} {blog.author}
+      </h3>
+      <a href={blog.url}>{blog.url}</a>
       <div>
-        {blog.title} {blog.author}{' '}
-        <button
-          id="toggle-visibility-button"
-          onClick={() => toggleVisibility()}
-        >
-          {showDetails ? 'hide' : 'view'}
+        likes {blog.likes}
+        <button id="likes-button" onClick={() => handleIncreaseLikes(blog)}>
+          like
         </button>
-      </div>
-      {showDetails && (
-        <>
-          <a href={blog.url}>{blog.url}</a>
+        <div>added by {blog.user.name}</div>
+        {blog.user.username === loggedUser.username && (
           <div>
-            likes {blog.likes}
-            <button id="likes-button" onClick={() => handleIncreaseLikes(blog)}>
-              like
+            <button id="remove-button" onClick={handleDeleteBlog}>
+              remove
             </button>
           </div>
-          <div>{blog.user.name}</div>
-          {blog.user.username === loggedUser.username && (
-            <div>
-              <button id="remove-button" onClick={handleDeleteBlog}>
-                remove
-              </button>
-            </div>
-          )}
-        </>
-      )}
+        )}
+      </div>
     </div>
   )
-}
-
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
 }
 
 export default Blog

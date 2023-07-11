@@ -1,23 +1,26 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import BlogList from './components/BlogList'
-import BlogForm from './components/BlogForm'
-import Notifications from './components/Notifications'
-import LoginForm from './components/LoginForm'
-import Togglable from './components/Togglable'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import Login from './components/Login'
+import NavBar from './components/NavBar'
+import Blogs from './components/Blogs'
+import Blog from './components/Blog'
+import Users from './components/Users'
 import User from './components/User'
+import Notifications from './components/Notifications'
 import blogService from './services/blogs'
 import storageService from './services/storage'
 import { initializeBlogs } from './reducers/blogsReducer'
+import { initializeUsers } from './reducers/usersReducer'
 import { logIn } from './reducers/loginReducer'
 
 const App = () => {
-  const blogFormRef = useRef()
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.login)
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -28,32 +31,23 @@ const App = () => {
     }
   }, [])
 
-  const toggleFormVisibility = () => {
-    blogFormRef.current.toggleVisibility()
+  if (!loggedUser) {
+    return <Login />
   }
 
   return (
     <div>
-      {!loggedUser ? (
-        <>
-          <h2>Log in to application</h2>
-          <Notifications />
-          <LoginForm />
-        </>
-      ) : (
-        <>
-          <h2>blogs</h2>
-          <Notifications />
-          <p>
-            <User loggedUser={loggedUser} />
-          </p>
-          <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm toggleFormVisibility={toggleFormVisibility} />
-          </Togglable>
-          <br />
-          <BlogList />
-        </>
-      )}
+      <Router>
+        <NavBar loggedUser={loggedUser} />
+        <h2>blog app</h2>
+        <Notifications />
+        <Routes>
+          <Route path="/" element={<Blogs />} />
+          <Route path="/blogs/:id" element={<Blog />} />
+          <Route path="users" element={<Users />} />
+          <Route path="users/:id" element={<User />} />
+        </Routes>
+      </Router>
     </div>
   )
 }
