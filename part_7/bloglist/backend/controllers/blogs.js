@@ -66,7 +66,23 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
   else{
     response.status(401).json({ error: 'unauthorized access' })
   }
+})
 
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { comment } = request.body
+
+  if (!comment) {
+    return response.status(400).json({ error: 'comment is missing' })
+  }
+
+  const blog = await Blog.findById(
+    request.params.id,
+  ).populate('user', { username: 1, name: 1 })
+
+  blog.comments = blog.comments.concat(comment)
+
+  const updatedBlog = await blog.save()
+  updatedBlog ? response.status(201).json(updatedBlog) : response.status(400).end()
 })
 
 module.exports = blogsRouter
