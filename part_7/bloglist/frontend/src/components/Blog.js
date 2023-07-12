@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
+import BlogComments from './BlogComments'
 import { increaseLikes, deleteBlog } from '../reducers/blogsReducer'
 
 const Blog = () => {
@@ -46,6 +47,7 @@ const Blog = () => {
           </div>
         )}
       </div>
+      <BlogComments blog={blog} />
     </div>
   )
 }
