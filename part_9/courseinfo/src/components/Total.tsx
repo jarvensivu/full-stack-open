@@ -8,6 +8,6 @@ const Total = (props: TotalProps) => {
       {courseParts.reduce((carry, part) => carry + part.exerciseCount, 0)}
     </p>
   );
-}
+};
 
 export default Total;
