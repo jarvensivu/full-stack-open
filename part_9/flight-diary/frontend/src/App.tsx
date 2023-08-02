@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { getAllDiaryEntries, addDiaryEntry } from "./services/diaryService";
 import { DiaryEntry } from "./types";
+import RadioButton from "./components/RadioButton";
 
 const App = () => {
   const [diaryEntries, setDiaryEntries] = useState<DiaryEntry[]>([]);
@@ -10,6 +11,9 @@ const App = () => {
   const [weather, setWeather] = useState<string>("");
   const [comment, setComment] = useState<string>("");
   const [error, setError] = useState<string | undefined>("");
+
+  const visibilityOptions = ["great", "good", "ok", "poor"];
+  const weatherOptions = ["sunny", "rainy", "cloudy", "stormy", "windy"];
 
   useEffect(() => {
     getAllDiaryEntries().then((entries) => {
@@ -39,47 +43,52 @@ const App = () => {
       });
   };
 
+  const selectVisibility = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setVisibility(event.target.value);
+  };
+
+  const selectWeather = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setWeather(event.target.value);
+  };
+
   return (
     <div className="App">
       <h1>Flight Diary</h1>
       <h2>Add new Entry</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
-        <label htmlFor="date">Date</label>
-        <input
-          type="date"
-          id="date"
-          name="date"
-          value={date}
-          onChange={(event) => setDate(event.target.value)}
-        />
-        <br />
-        <label htmlFor="visibility">Visibility</label>
-        <input
-          type="text"
-          id="visibility"
-          name="visibility"
-          value={visibility}
-          onChange={(event) => setVisibility(event.target.value)}
-        />
-        <br />
-        <label htmlFor="weather">Weather</label>
-        <input
-          type="text"
-          id="weather"
-          name="weather"
-          value={weather}
-          onChange={(event) => setWeather(event.target.value)}
-        />
-        <br />
-        <label htmlFor="comment">Comment</label>
-        <input
-          type="text"
-          id="comment"
-          name="comment"
-          value={comment}
-          onChange={(event) => setComment(event.target.value)}
-        />
+        <div>
+          <label htmlFor="date">Date</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            value={date}
+            onChange={(event) => setDate(event.target.value)}
+          />
+        </div>
+        <div>
+          <span>Visibility </span>
+          {visibilityOptions.map((option) => (
+            <RadioButton key={option} button={option} currentValue={visibility} handleSelect={selectVisibility} />
+          ))}
+        </div>
+        <div>
+          <span>Weather </span>
+          {weatherOptions.map((option) => (
+            <RadioButton key={option} button={option} currentValue={weather} handleSelect={selectWeather} />
+          ))}
+        </div>
+        <div>
+          <label htmlFor="comment">Comment</label>
+          <input
+            type="text"
+            id="comment"
+            name="comment"
+            value={comment}
+            onChange={(event) => setComment(event.target.value)}
+          />
+        </div>
         <button type="submit">Add</button>
       </form>
       <h2>Diary entries</h2>

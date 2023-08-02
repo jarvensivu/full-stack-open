@@ -1,3 +1,10 @@
+export interface RadioButtonProps {
+  button: string;
+  currentValue: string;
+  handleSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+
 export interface DiaryEntry {
   id: number;
   date: string;
