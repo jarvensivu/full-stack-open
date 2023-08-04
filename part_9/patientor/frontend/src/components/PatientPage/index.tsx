@@ -1,15 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
-//import MaleIcon from '@mui/icons-material/Male';
 import { Male, Female } from '@mui/icons-material';
 import patientService from "../../services/patients";
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 
-const PatientPage = () => {
+interface Props {
+  diagnoses: Diagnosis[];
+}
+
+const PatientPage = ({ diagnoses }: Props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [patient, setPatient] = useState<Patient>();
   const { id } = useParams<{ id: string }>();
+
   useEffect(() => {
     const fetchPatient = async () => {
       try {
@@ -23,10 +27,6 @@ const PatientPage = () => {
     }
     fetchPatient();
   }, [id]);
-
-  console.log(id);
-  console.log(patient);
-  console.log(isLoading);
 
   if (isLoading) {
     return (
@@ -67,6 +67,28 @@ const PatientPage = () => {
           <Typography variant="body1">
             occupation: {patient.occupation}
           </Typography>
+          <Typography variant="h6" sx={{ mt: 3 }}>
+            entries
+          </Typography>
+          {patient.entries.map(entry => (
+            <div key={entry.id}>
+              <Typography variant="body1" sx={{ mt: 1 }}>
+                {entry.date} <em>{entry.description}</em>
+              </Typography>
+              <ul>
+                {entry.diagnosisCodes?.map(code => (
+                  <li key={code}>
+                    {code} {diagnoses.find(diagnosis => diagnosis.code === code)?.name}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+          {patient.entries.length === 0 && (
+            <Typography variant="body1" sx={{ mt: 1 }}>
+              No entries
+            </Typography>
+          )}  
       </Box>
     </div>
   );
