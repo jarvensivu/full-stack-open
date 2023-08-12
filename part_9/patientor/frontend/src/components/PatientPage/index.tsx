@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Alert, Box, Button, Stack, CircularProgress, Typography } from "@mui/material";
+import { Alert, Box, Button, ButtonGroup, Stack, CircularProgress, Typography } from "@mui/material";
 import { Work, LocalHospital, HealthAndSafety, Favorite, Male, Female } from '@mui/icons-material';
 import AddEntryForm from "./AddEntryForm";
 import patientService from "../../services/patients";
@@ -121,7 +121,9 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
   const [patient, setPatient] = useState<Patient>();
   const [error, setError] = useState<string>();
   const { id } = useParams<{ id: string }>();
-  const [formIsOpen, setFormIsOpen] = useState<boolean>(true);
+  const [showForm, setShowForm] = useState<boolean>(false);
+  const [showEntryOptions, setShowEntryOptions] = useState<boolean>(false);
+  const [entryType, setEntryType] = useState<EntryType>();
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -138,8 +140,14 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
   }, [id]);
 
   const toggleForm = () => {
-    setFormIsOpen(!formIsOpen);
+    setShowForm(!showForm);
     setError(undefined);
+  }
+
+  const handleSelectingEntryType = (entryType: EntryType) => {
+    setEntryType(entryType);
+    setShowEntryOptions(false);
+    setShowForm(true);
   }
 
   const submitNewEntry = async (values: EntryFormValues) => {
@@ -204,11 +212,19 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
             occupation: {patient.occupation}
           </Typography>
           {error && <Alert severity="error">{error}</Alert>}
-          {!formIsOpen && (
-            <Button sx={{mt: 3}} variant="contained" onClick={toggleForm}>New entry</Button>
+          {!showForm && showEntryOptions &&(
+            <ButtonGroup variant="text" aria-label="text button group">
+              <Button sx={{mt: 3}} onClick={() => handleSelectingEntryType(EntryType.HealthCheck)}>New HealthCheck entry</Button>
+              <Button sx={{mt: 3}} onClick={() => handleSelectingEntryType(EntryType.Hospital)}>New Hospital entry</Button>
+              <Button sx={{mt: 3}} onClick={() => handleSelectingEntryType(EntryType.OccupationalHealthcare)}>New OccupationalHealthcare entry</Button>
+              <Button sx={{mt: 3}} onClick={() => setShowEntryOptions(false)}>Cancel</Button>
+            </ButtonGroup>
           )}
-          {formIsOpen && (
-            <AddEntryForm onCancel={toggleForm} onSubmit={submitNewEntry}/>
+          {!showForm && !showEntryOptions && (
+            <Button sx={{mt: 3}} variant="contained" onClick={() => setShowEntryOptions(true)}>New entry</Button>
+          )}
+          {showForm && (
+            <AddEntryForm onCancel={toggleForm} onSubmit={submitNewEntry} entryType={entryType}/>
           )}
           <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
             entries
