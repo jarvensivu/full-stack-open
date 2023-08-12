@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Box, Stack, CircularProgress, Typography } from "@mui/material";
-import { Work, LocalHospital, HealthAndSafety, Favorite } from '@mui/icons-material';
-import { Male, Female } from '@mui/icons-material';
+import axios from "axios";
+import { Alert, Box, Button, Stack, CircularProgress, Typography } from "@mui/material";
+import { Work, LocalHospital, HealthAndSafety, Favorite, Male, Female } from '@mui/icons-material';
+import AddEntryForm from "./AddEntryForm";
 import patientService from "../../services/patients";
-import { Diagnosis, Patient, Entry, HealthCheckRating } from "../../types";
+import { Diagnosis, Patient, Entry, EntryFormValues, EntryType } from "../../types";
 import { assertNever } from "../../utils";
 
 interface PatientPageProps {
@@ -27,13 +28,13 @@ interface HealthRatingBarProps {
 
 const HealthRatingBar = ({ rating }: HealthRatingBarProps) => {
   switch (rating) {
-    case HealthCheckRating.Healthy:
+    case 0:
       return <Favorite style={{color: "#00cc00"}}/>;
-    case HealthCheckRating.LowRisk:
+    case 1:
       return <Favorite style={{color: "#ffff00"}}/>
-    case HealthCheckRating.HighRisk:
+    case 2:
       return <Favorite style={{color: "#ff6600"}}/>
-    case HealthCheckRating.CriticalRisk:
+    case 3:
       return <Favorite style={{color: "#ff0000"}}/>
     default:
       return null;
@@ -56,7 +57,7 @@ const DiagnosisList = ({diagnoses, entry}: DiagnosisListProps) => {
 
 const EntryDetails = ({ diagnoses, entry }: EntryDetailsProps ) => {
   switch (entry.type) {
-    case "Hospital":
+    case EntryType.Hospital:
       return (
       <div>
         <Typography variant="body1">
@@ -74,7 +75,7 @@ const EntryDetails = ({ diagnoses, entry }: EntryDetailsProps ) => {
         </Typography>
       </div>
       )
-    case "HealthCheck":
+    case EntryType.HealthCheck:
       return (
         <div>
           <Typography variant="body1">
@@ -90,7 +91,7 @@ const EntryDetails = ({ diagnoses, entry }: EntryDetailsProps ) => {
           </Typography>
         </div>
       );
-    case "OccupationalHealthcare":
+    case EntryType.OccupationalHealthcare:
       return (
         <div>
           <Typography variant="body1">
@@ -118,7 +119,9 @@ const EntryDetails = ({ diagnoses, entry }: EntryDetailsProps ) => {
 const PatientPage = ({ diagnoses }: PatientPageProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [patient, setPatient] = useState<Patient>();
+  const [error, setError] = useState<string>();
   const { id } = useParams<{ id: string }>();
+  const [formIsOpen, setFormIsOpen] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -133,6 +136,33 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
     }
     fetchPatient();
   }, [id]);
+
+  const toggleForm = () => {
+    setFormIsOpen(!formIsOpen);
+    setError(undefined);
+  }
+
+  const submitNewEntry = async (values: EntryFormValues) => {
+    try {
+      const patient = await patientService.addEntry(id, values);
+      setPatient(patient);
+      toggleForm();
+    }
+    catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if(e?.response?.data?.Error && typeof e?.response?.data.Error === "string") {
+          const message = e.response.data.Error
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  };
 
   if (isLoading) {
     return (
@@ -173,6 +203,13 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
           <Typography variant="body1">
             occupation: {patient.occupation}
           </Typography>
+          {error && <Alert severity="error">{error}</Alert>}
+          {!formIsOpen && (
+            <Button sx={{mt: 3}} variant="contained" onClick={toggleForm}>New entry</Button>
+          )}
+          {formIsOpen && (
+            <AddEntryForm onCancel={toggleForm} onSubmit={submitNewEntry}/>
+          )}
           <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
             entries
           </Typography>

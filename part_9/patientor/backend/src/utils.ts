@@ -15,13 +15,13 @@ const isEmptyString = (text: string): boolean => {
   return text.trim().length === 0;
 };
 
-const parseData = (data: unknown): string => {
+const parseData = (data: unknown, name: string): string => {
   if (!isString(data)) {
-    throw new Error("Incorrect or missing data");
+    throw new Error(`Incorrect data in field: '${name}'`);
   }
 
   if (isEmptyString(data)) {
-    throw new Error("Missing value");
+    throw new Error(`Missing value in field: '${name}'`);
   }
 
   return data;
@@ -29,11 +29,11 @@ const parseData = (data: unknown): string => {
 
 const parseGender = (gender: unknown): Gender => {
   if (!isString(gender)) {
-    throw new Error("Incorrect or missing data");
+    throw new Error("Incorrect data in field: 'gender'");
   }
 
   if (isEmptyString(gender)) {
-    throw new Error("Missing value");
+    throw new Error("Missing value in field: 'gender'");
   }
 
   switch (gender) {
@@ -44,35 +44,39 @@ const parseGender = (gender: unknown): Gender => {
     case "other":
       return Gender.Other;
     default:
-      throw new Error(`Unknown gender: ${gender}`);
+      throw new Error(`Unknown gender: '${gender}'`);
   }
 };
 
 export const toNewPatient = (object: unknown): NewPatient => {
-  if (!object || typeof object !== "object") {
-    throw new Error("Incorrect or missing data");
+  if (!object) {
+    throw new Error("Missing patient data");
+  }
+  if (typeof object !== "object"){
+    throw new Error("Patient data is in incorrect format. Patient data must be an object");
   }
 
-  if (
-    "name" in object &&
-    "dateOfBirth" in object &&
-    "ssn" in object &&
-    "gender" in object &&
-    "occupation" in object
-  ) {
-    const newPatient: NewPatient = {
-      name: parseData(object.name),
-      ssn: parseData(object.ssn),
-      occupation: parseData(object.occupation),
-      dateOfBirth: parseData(object.dateOfBirth),
-      gender: parseGender(object.gender),
-      entries: []
-    };
+  if (!("name" in object))
+    throw new Error("Incorrect data: a 'name' field missing");
+  if (!("ssn" in object))
+    throw new Error("Incorrect data: a 'ssn' field missing");
+  if (!("occupation" in object))
+    throw new Error("Incorrect data: a 'occupation' field missing");
+  if (!("dateOfBirth" in object))
+    throw new Error("Incorrect data: a 'date of birth' field missing");
+  if (!("gender" in object))
+    throw new Error("Incorrect data: a 'gender' field missing");
 
-    return newPatient;
-  }
+  const newPatient: NewPatient = {
+    name: parseData(object.name, "name"),
+    ssn: parseData(object.ssn, "ssn"),
+    occupation: parseData(object.occupation, "occupation"),
+    dateOfBirth: parseData(object.dateOfBirth, "dateOfBirth"),
+    gender: parseGender(object.gender),
+    entries: [],
+  };
 
-  throw new Error("Incorrect data: a field missing");
+  return newPatient;
 };
 
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
@@ -84,29 +88,19 @@ const parseDiagnosisCodes = (object: unknown): Array<Diagnosis["code"]> => {
 };
 
 const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
-  if (!isString(rating)) {
-    throw new Error("Incorrect or missing data");
-  }
-
-  if (isEmptyString(rating)) {
-    throw new Error("Missing value");
-  }
-
   if (typeof rating !== "number") {
-    throw new Error("Health check rating is not a number");
+    throw new Error("Incorrect data in field: 'healthCheckRating'. Data must be a number number");
   }
 
   if (rating < 0 || rating > 3) {
-    throw new Error("Health check rating is out of range");
+    throw new Error("Health check rating is out of range. Rating must be between 0 and 3");
   }
 
   return rating;
 };
 
-const parseSickLeave = (object: unknown): SickLeave | undefined => {
+const parseSickLeave = (object: object): SickLeave | undefined => {
   if (
-    object &&
-    typeof object === "object" &&
     "sickLeave" in object &&
     object.sickLeave !== null &&
     typeof object.sickLeave === "object" &&
@@ -114,39 +108,43 @@ const parseSickLeave = (object: unknown): SickLeave | undefined => {
     "endDate" in object.sickLeave
   ) {
     return {
-      startDate: parseData(object.sickLeave.startDate),
-      endDate: parseData(object.sickLeave.endDate),
+      startDate: parseData(object.sickLeave.startDate, "sick leave start date"),
+      endDate: parseData(object.sickLeave.endDate, "sick leave end date"),
     };
   }
   return undefined;
 };
 
 export const toEntry = (object: unknown): EntryWithoutId => {
-  if (!object || typeof object !== "object") {
-    throw new Error("Incorrect or missing data");
+  if (!object) {
+    throw new Error("Missing entry data");
+  }
+  if (typeof object !== "object") {
+    throw new Error("Entry data is in incorrect format. Entry data must be an object");
   }
 
-  if (
-    !("description" in object) ||
-    !("date" in object) ||
-    !("specialist" in object) ||
-    !("diagnosisCodes" in object) ||
-    !("type" in object)
-  ) {
-    throw new Error("Incorrect data: a field missing");
-  }
+  if (!("description" in object))
+    throw new Error("Incorrect data: a 'description' field missing");
+  if (!("date" in object))
+    throw new Error("Incorrect data: a 'date' field missing");
+  if (!("specialist" in object))
+    throw new Error("Incorrect data: a 'specialist' field missing");
+  if (!("diagnosisCodes" in object))
+    throw new Error("Incorrect data: a 'diagnosisCodes' field missing");
+  if (!("type" in object))
+    throw new Error("Incorrect data: a 'type' field missing");
 
   const newEntry = {
-    description: parseData(object.description),
-    date: parseData(object.date),
-    specialist: parseData(object.specialist),
+    description: parseData(object.description, "description"),
+    date: parseData(object.date, "date"),
+    specialist: parseData(object.specialist, "specialist"),
     diagnosisCodes: parseDiagnosisCodes(object),
   };
 
   switch (object.type) {
     case "HealthCheck":
       if (!("healthCheckRating" in object)) {
-        throw new Error("Incorrect data: a field missing");
+        throw new Error("Incorrect data: a 'healthCheckRating' field missing");
       }
       return {
         ...newEntry,
@@ -154,34 +152,38 @@ export const toEntry = (object: unknown): EntryWithoutId => {
         healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
       };
     case "Hospital":
-      if (
-        !("discharge" in object) ||
-        typeof object.discharge !== "object" ||
-        object.discharge === null ||
-        !("date" in object.discharge) ||
-        !("criteria" in object.discharge)
-      ) {
-        throw new Error("Incorrect data: a field missing");
+      if (!("discharge" in object)) {
+        throw new Error("Incorrect data: a 'healthCheckRating' field missing");
       }
+      if (typeof object.discharge !== "object" || object.discharge === null) {
+        throw new Error("Incorrect data: a 'discharge' field must be an object");
+      }
+      if (!("date" in object.discharge)) {
+        throw new Error("Incorrect data: a 'date' field missing");
+      }
+      if (!("criteria" in object.discharge)) {
+        throw new Error("Incorrect data: a 'criteria' field missing");
+      }
+
       return {
         ...newEntry,
         type: object.type,
         discharge: {
-          date: parseData(object.discharge.date),
-          criteria: parseData(object.discharge.criteria),
+          date: parseData(object.discharge.date, "discharge date"),
+          criteria: parseData(object.discharge.criteria, "discharge criteria"),
         },
       };
     case "OccupationalHealthcare":
       if (!("employerName" in object)) {
-        throw new Error("Incorrect data: a field missing");
+        throw new Error("Incorrect data: a 'employerName' field missing");
       }
       return {
         ...newEntry,
         type: object.type,
-        employerName: parseData(object.employerName),
+        employerName: parseData(object.employerName, "employerName"),
         sickLeave: parseSickLeave(object),
       };
     default:
-      throw new Error(`Unknown entry type: ${object.type}`);
+      throw new Error(`Unknown entry type: '${object.type}'`);
   }
 };
