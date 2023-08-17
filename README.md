@@ -15,4 +15,4 @@ My exercise solutions for [Full Stack open](https://fullstackopen.com/) course
 | [6](./part_6/) | Done        | 24/24     |
 | [7](./part_7/) | In Progress | 19/21     |
 | [8](./part_8/) | In Progress | 12/26     |
-| [9](./part_9/) | In Progress | 28/29     |
+| [9](./part_9/) | Done        | 29/29     |

@@ -224,7 +224,7 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
             <Button sx={{mt: 3}} variant="contained" onClick={() => setShowEntryOptions(true)}>New entry</Button>
           )}
           {showForm && (
-            <AddEntryForm onCancel={toggleForm} onSubmit={submitNewEntry} entryType={entryType}/>
+            <AddEntryForm onCancel={toggleForm} onSubmit={submitNewEntry} entryType={entryType} diagnoses={diagnoses}/>
           )}
           <Typography variant="h6" sx={{ mt: 3, mb: 1 }}>
             entries
