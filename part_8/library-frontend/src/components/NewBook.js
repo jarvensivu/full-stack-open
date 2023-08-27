@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useMutation } from '@apollo/client'
+import { ApolloError, useMutation } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from '../queries'
 
 const NewBook = ({ show, setError }) => {
@@ -12,8 +12,11 @@ const NewBook = ({ show, setError }) => {
   const [ addBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ],
     onError: (error) => {
-      const messages = error.graphQLErrors[0].message
-      setError(messages)
+      let errorMessage = 'Unknown error'
+      if (error instanceof ApolloError) {
+        errorMessage = error.graphQLErrors[0].message
+      }
+      setError(errorMessage)
     }
   })
 

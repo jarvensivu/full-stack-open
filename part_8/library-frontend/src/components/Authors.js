@@ -13,6 +13,10 @@ const Authors = ({ show, setError }) => {
     return <div>loading...</div>
   }
 
+  if (!data) {
+    return <div>Failed to load authors</div>
+  }
+
   return (
     <div>
       <h2>authors</h2>

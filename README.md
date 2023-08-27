@@ -46,5 +46,5 @@ My solutions for the exercises of the [University of Helsinki](https://www.helsi
 | [5](./part_5/) | Done        | 23/23     |
 | [6](./part_6/) | Done        | 24/24     |
 | [7](./part_7/) | In Progress | 19/21     |
-| [8](./part_8/) | In Progress | 16/26     |
+| [8](./part_8/) | In Progress | 18/26     |
 | [9](./part_9/) | Done        | 29/29     |
