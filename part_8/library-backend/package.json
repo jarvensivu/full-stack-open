@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "Juha Järvensivu",
   "dependencies": {
-    "@apollo/server": "^4.5.0",
+    "@apollo/server": ">=4.9.3",
     "dotenv": "^16.3.1",
     "graphql": "^16.6.0",
     "jsonwebtoken": "^9.0.1",
