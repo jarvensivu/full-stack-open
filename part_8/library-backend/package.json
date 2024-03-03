@@ -15,9 +15,8 @@
     "dotenv": "^16.3.1",
     "graphql": ">=16.8.1",
     "jsonwebtoken": "^9.0.1",
-    "mongoose": "^7.4.3",
+    "mongoose": "^7.6.9",
     "mongoose-unique-validator": "^4.0.0",
-    "mongodb": ">=5.8.0",
     "uuid": "^9.0.0",
     "ip": ">=2.0.1"
   },
