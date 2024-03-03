@@ -1,5 +1,12 @@
+import { Alert } from '@mui/material'
+
 const Notification = ({ notification }) => {
-  return <div>{notification.message}</div>
+  const severity = notification.type ? notification.type : 'info'
+  return (
+    <Alert severity={severity} sx={{ my: 1 }}>
+      {notification.message}
+    </Alert>
+  )
 }
 
 export default Notification

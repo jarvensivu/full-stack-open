@@ -1,21 +1,30 @@
-import { useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { removeCurrentUser } from '../reducers/loginReducer'
+import { useSelector } from 'react-redux'
+import { AppBar, Toolbar, Typography } from '@mui/material'
 
-const NavBar = ({ loggedUser }) => {
-  const dispatch = useDispatch()
+import Notifications from './Notifications'
+import NavLinks from './NavLinks'
+import Profile from './Profile'
 
-  const handleLogout = () => {
-    dispatch(removeCurrentUser())
-  }
+const NavBar = () => {
+  const loggedUser = useSelector((state) => state.login)
 
   return (
-    <div>
-      <Link to="/">blogs</Link>
-      <Link to="/users">users</Link>
-      {loggedUser.name} logged in
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <>
+      <AppBar position="sticky" component="nav" sx={{ height: 70 }}>
+        <Toolbar>
+          <Typography variant="h6" sx={{ pr: 2 }}>
+            BLOG APP
+          </Typography>
+          {loggedUser && (
+            <>
+              <NavLinks />
+              <Profile />
+            </>
+          )}
+        </Toolbar>
+      </AppBar>
+      <Notifications />
+    </>
   )
 }
 

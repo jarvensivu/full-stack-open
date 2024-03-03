@@ -1,27 +1,28 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Login from './components/Login'
-import NavBar from './components/NavBar'
-import Blogs from './components/Blogs'
-import Blog from './components/Blog'
-import Users from './components/Users'
-import User from './components/User'
-import Notifications from './components/Notifications'
+import { Routes, Route } from 'react-router-dom'
+import Blog from './pages/Blog'
+import Blogs from './pages/Blogs'
+import Login from './pages/Login'
+import User from './pages/User'
+import Users from './pages/Users'
 import blogService from './services/blogs'
 import storageService from './services/storage'
 import { initializeBlogs } from './reducers/blogsReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { logIn } from './reducers/loginReducer'
+import Layout from './components/Layout'
 
 const App = () => {
   const dispatch = useDispatch()
   const loggedUser = useSelector((state) => state.login)
 
   useEffect(() => {
-    dispatch(initializeBlogs())
-    dispatch(initializeUsers())
-  }, [dispatch])
+    if (loggedUser) {
+      dispatch(initializeBlogs())
+      dispatch(initializeUsers())
+    }
+  }, [loggedUser, dispatch])
 
   useEffect(() => {
     const user = storageService.loadUser()
@@ -32,23 +33,25 @@ const App = () => {
   }, [])
 
   if (!loggedUser) {
-    return <Login />
+    return (
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Login />} />
+        </Routes>
+      </Layout>
+    )
   }
 
   return (
-    <div>
-      <Router>
-        <NavBar loggedUser={loggedUser} />
-        <h2>blog app</h2>
-        <Notifications />
-        <Routes>
-          <Route path="/" element={<Blogs />} />
-          <Route path="/blogs/:id" element={<Blog />} />
-          <Route path="users" element={<Users />} />
-          <Route path="users/:id" element={<User />} />
-        </Routes>
-      </Router>
-    </div>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<Blogs />} />
+        <Route path="/blogs/:id" element={<Blog />} />
+        <Route path="users" element={<Users />} />
+        <Route path="users/:id" element={<User />} />
+        <Route path="/*" element={<h3>404 Page Not Found</h3>} />
+      </Routes>
+    </Layout>
   )
 }
 

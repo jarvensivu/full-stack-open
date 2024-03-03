@@ -82,7 +82,6 @@ const blogSlice = createSlice({
       state.push(action.payload)
     },
     updateBlog: (state, action) => {
-      console.log(action.payload)
       return sortBlogs(
         state.map((blog) =>
           blog.id === action.payload.id ? action.payload : blog

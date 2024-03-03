@@ -1,43 +1,27 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { addNewComment } from '../reducers/blogsReducer'
+import { Box, List, ListItem, ListItemText, Typography } from '@mui/material'
 
 const BlogComments = ({ blog }) => {
-  const [comment, setComment] = useState('')
-
-  const dispatch = useDispatch()
-
-  const handleFormChange = (event) => {
-    setComment(event.target.value)
-  }
-
-  const handleCommentSubmit = (event) => {
-    event.preventDefault()
-    dispatch(addNewComment(blog.id, { comment: event.target.comment.value }))
-    setComment('')
-  }
-
   return (
     <div>
-      <h4>comments</h4>
-      <form id="blog-comment-form" onSubmit={handleCommentSubmit}>
-        <input
-          id="blog-comment-input"
-          type="text"
-          value={comment}
-          name="comment"
-          onChange={handleFormChange}
-        />
-        <button id="blog-comment-submit" type="submit">
-          add comment
-        </button>
-      </form>
-      {blog.comments.length === 0 && <p>No comments yet</p>}
-      <ul>
-        {blog.comments.map((comment, index) => (
-          <li key={index}>{comment}</li>
-        ))}
-      </ul>
+      <Typography variant="h5" sx={{ pl: 2, pt: 2 }}>
+        comments
+      </Typography>
+      {(!blog.comments || blog.comments.length === 0) && (
+        <Typography variant="body1" sx={{ p: 2 }}>
+          No comments yet
+        </Typography>
+      )}
+      {blog.comments && blog.comments.length > 0 && (
+        <Box sx={{ width: 300 }}>
+          <List>
+            {blog.comments.map((comment, i) => (
+              <ListItem key={i}>
+                <ListItemText align="center" primary={comment} />
+              </ListItem>
+            ))}
+          </List>
+        </Box>
+      )}
     </div>
   )
 }

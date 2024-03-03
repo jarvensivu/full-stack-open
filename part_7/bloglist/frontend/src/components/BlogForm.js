@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { createBlog } from '../reducers/blogsReducer'
 
 const BlogForm = ({ toggleFormVisibility }) => {
@@ -28,44 +29,58 @@ const BlogForm = ({ toggleFormVisibility }) => {
   }
 
   return (
-    <>
-      <h3>create new</h3>
+    <Box sx={{ mt: 2, height: 380 }}>
+      <Typography variant="h6" component="h3" sx={{ pt: 2 }}>
+        create new blog
+      </Typography>
       <form id="form" onSubmit={handleBlogSubmit}>
         <div>
-          title:
-          <input
+          <TextField
             id="title"
+            label="title"
+            variant="standard"
             type="text"
             value={newBlog.title}
             name="title"
+            margin="normal"
             onChange={handleFormChange}
           />
         </div>
         <div>
-          author:
-          <input
+          <TextField
             id="author"
+            label="author"
+            variant="standard"
             type="text"
             value={newBlog.author}
             name="author"
+            margin="normal"
             onChange={handleFormChange}
           />
         </div>
         <div>
-          url:
-          <input
+          <TextField
             id="url"
+            label="url"
+            variant="standard"
             type="text"
             value={newBlog.url}
             name="url"
+            margin="normal"
             onChange={handleFormChange}
           />
         </div>
-        <button id="create" type="submit">
+        <Button
+          id="create-blog-button"
+          variant="contained"
+          color="primary"
+          type="submit"
+          sx={{ mt: 2 }}
+        >
           create
-        </button>
+        </Button>
       </form>
-    </>
+    </Box>
   )
 }
 
