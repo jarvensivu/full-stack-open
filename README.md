@@ -48,3 +48,13 @@ My solutions for the exercises of the [University of Helsinki](https://www.helsi
 | [7](./part_7/) | Done        | 21/21     |
 | [8](./part_8/) | In Progress | 18/26     |
 | [9](./part_9/) | Done        | 29/29     |
+
+## Course certificates
+
+### Full Stack Open parts 0-7
+
+![Full Stack Open certificate](./img/certificate-fullstack.png)
+
+### Full Stack Open part 9: TypeScript
+
+![Full Stack Open TypeScrtip certificate](./img/certificate-typescript.png)
