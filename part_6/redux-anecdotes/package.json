@@ -44,6 +44,7 @@
   },
   "devDependencies": {
     "json-server": "^0.17.3",
-    "redux-devtools-extension": "^2.13.9"
+    "redux-devtools-extension": "^2.13.9",
+    "webpack": ">=5.76.0"
   }
 }

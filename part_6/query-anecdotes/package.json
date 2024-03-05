@@ -40,6 +40,7 @@
     ]
   },
   "devDependencies": {
-    "json-server": "^0.17.1"
+    "json-server": "^0.17.1",
+    "webpack": ">=5.76.0"
   }
 }
