@@ -51,10 +51,10 @@ My solutions for the exercises of the [University of Helsinki](https://www.helsi
 
 ## Course certificates
 
-### Full Stack Open parts 0-7
+### Full Stack Open: core course
 
-![Full Stack Open certificate](./img/certificate-fullstack.png)
+![Full Stack Open core course Certificate](./img/certificate-fullstack.png)
 
-### Full Stack Open part 9: TypeScript
+### Full Stack Open: TypeScript module
 
-![Full Stack Open TypeScrtip certificate](./img/certificate-typescript.png)
+![Full Stack Open TypeScript module Certificate](./img/certificate-typescript.png)
