@@ -44,6 +44,7 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
+    "@babel/traverse": ">=7.23.2",
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1"
   }

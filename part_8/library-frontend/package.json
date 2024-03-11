@@ -41,6 +41,7 @@
     ]
   },
   "devDependencies": {
+    "@babel/traverse": ">=7.23.2",
     "webpack": ">=5.76.0"
   }
 }

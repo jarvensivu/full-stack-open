@@ -26,6 +26,7 @@
     "mongoose-unique-validator": "^4.0.0"
   },
   "devDependencies": {
+    "@babel/traverse": ">=7.23.2",
     "eslint": "^8.39.0",
     "jest": "^29.5.0",
     "nodemon": "^2.0.22",

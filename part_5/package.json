@@ -41,6 +41,7 @@
   },
   "proxy": "http://localhost:3003",
   "devDependencies": {
+    "@babel/traverse": ">=7.23.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^14.0.0",
     "@testing-library/user-event": "^14.4.3",
