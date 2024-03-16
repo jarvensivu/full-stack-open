@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build:ui": "rm -rf build && cd ../part_2/phonebook/ && npm run build && cp -r build ../../part_3/frontend",
+    "build:ui": "rm -rf frontend && cd ../part_2/phonebook/ && npm run build && cp -r dist ../../part_3/frontend",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
