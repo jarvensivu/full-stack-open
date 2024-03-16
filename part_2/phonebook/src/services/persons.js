@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = import.meta.env.VITE_API_ENDPOINT ?? '/api/persons';
 
 const getAll = () => {
   const request = axios.get(baseUrl);
