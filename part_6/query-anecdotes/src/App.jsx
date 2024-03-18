@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query"
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notifications from "./components/Notifications";
 import anecdoteService from "./services/anecdotes";
