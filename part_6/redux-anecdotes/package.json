@@ -29,7 +29,7 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.3",
     "json-server": "^1.0.0-alpha.23",
-    "vite": "^4.4.5"
+    "vite": ">=4.5.3"
   },
   "eslintConfig": {
     "extends": [
