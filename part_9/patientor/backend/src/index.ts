@@ -6,7 +6,7 @@ import pingRouter from './routes/ping';
 
 const app = express();
 
-const allowedOrigins = ['http://localhost:3000'];
+const allowedOrigins = ['http://localhost:3000', 'http://localhost:5173'];
 
 const options: cors.CorsOptions = {
   origin: allowedOrigins
