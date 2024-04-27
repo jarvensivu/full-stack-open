@@ -6,9 +6,9 @@ import { apiBaseUrl } from "../constants";
 const getAll = async () => {
   const { data: diagnoses } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
   return diagnoses;
-}
+};
 
-// eslint-disable-next-line import/no-anonymous-default-export
+// eslint-disable-next-line
 export default {
   getAll
 };
