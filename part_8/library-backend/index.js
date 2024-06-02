@@ -54,6 +54,7 @@ const typeDefs = `
     bookCount: Int!
     authorCount: Int!
     allBooks(author: String, genre: String): [Book]!
+    allGenres: [String]!
     allAuthors: [Author]!
     me: User
   }
@@ -85,18 +86,23 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
+      const author = await Author.findOne({ name: args.author });
       if (args.author && args.genre) {
-        const author = await Author.findOne({ name: args.author });
-        return Book.find({
-          $and: [{ author: author.id }, { genres: { $in: [args.genre] } }],
-        }).populate("author");
+        return Book.find({ $and: [{ author: author.id }, { genres: { $in: [args.genre] } }]}).populate("author");
       } else if (args.author) {
-        const author = await Author.findOne({ name: args.author });
         return Book.find({ author: author.id }).populate("author");
       } else if (args.genre) {
         return Book.find({ genres: { $in: [args.genre] } }).populate("author");
       }
       return Book.find({}).populate("author");
+    },
+    allGenres: async () => {
+      const books = await Book.find({});
+      const genres = new Set();
+      books.forEach((book) => {
+        book.genres.forEach((genre) => genres.add(genre));
+      });
+      return Array.from(genres).sort();
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {

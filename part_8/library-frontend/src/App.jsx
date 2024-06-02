@@ -1,16 +1,22 @@
 import { useState, useEffect } from "react";
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useQuery } from '@apollo/client'
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
+import Recommend from "./components/Recommend";
 import Login from "./components/Login";
 import Notify from "./components/Notify";
+import { ME } from "./queries";
 
 const App = () => {
   const [page, setPage] = useState("authors");
   const [errorMessage, setErrorMessage] = useState(null);
   const [token, setToken] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState("");
   const client = useApolloClient();
+
+  const userResult = useQuery(ME);
+  const favoriteGenre = userResult?.data?.me?.favoriteGenre;
 
   useEffect(() => {
     const localUserToken = localStorage.getItem("app-user-token");
@@ -39,6 +45,10 @@ const App = () => {
     setPage("authors");
   };
 
+  const handleGenreChange = (event) => {
+    setSelectedGenre(event.target.value);
+  };
+
   return (
     <div>
       <Notify errorMessage={errorMessage} />
@@ -48,16 +58,36 @@ const App = () => {
         {token ? (
           <>
             <button onClick={() => setPage("add")}>add book</button>
+            <button onClick={() => setPage("recommend")}>recommend</button>
             <button onClick={handleLogout}>logout</button>
           </>
         ) : (
           <button onClick={() => setPage("login")}>login</button>
         )}
       </div>
-      <Authors show={page === "authors"} setError={notify} />
-      <Books show={page === "books"} />
-      <NewBook show={page === "add"} setError={notify} />
-      <Login show={page === "login"} setError={notify} handleLogin={handleLogin} />
+      <Authors
+        show={page === "authors"}
+        setError={notify}
+      />
+      <Books
+        show={page === "books"}
+        selectedGenre={selectedGenre}
+        handleGenreChange={handleGenreChange}
+      />
+      <Recommend
+        show={page === "recommend"}
+        favoriteGenre={favoriteGenre}
+      />
+      <NewBook
+        show={page === "add"}
+        setError={notify}
+        favoriteGenre={favoriteGenre}
+      />
+      <Login
+        show={page === "login"}
+        setError={notify}
+        handleLogin={handleLogin}
+      />
     </div>
   );
 };
