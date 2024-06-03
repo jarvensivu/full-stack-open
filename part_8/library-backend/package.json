@@ -14,7 +14,6 @@
     "@apollo/server": "^4.10.4",
     "dotenv": "^16.3.1",
     "graphql": ">=16.8.1",
-    "ip": ">=2.0.1",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.6.9",
     "mongoose-unique-validator": "^4.0.0",
