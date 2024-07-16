@@ -12,14 +12,18 @@
   "author": "Juha Järvensivu",
   "dependencies": {
     "@apollo/server": "^4.10.4",
+    "@graphql-tools/schema": "^10.0.4",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.19.2",
     "graphql": ">=16.8.1",
+    "graphql-subscriptions": "^2.0.0",
+    "graphql-ws": "^5.16.0",
     "jsonwebtoken": "^9.0.1",
     "mongoose": "^7.6.12",
     "mongoose-unique-validator": "^4.0.0",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "ws": "^8.18.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"
