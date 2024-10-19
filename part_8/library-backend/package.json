@@ -12,7 +12,7 @@
   "author": "Juha Järvensivu",
   "dependencies": {
     "@apollo/server": "^4.11.0",
-    "@graphql-tools/schema": "^10.0.6",
+    "@graphql-tools/schema": "^10.0.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
