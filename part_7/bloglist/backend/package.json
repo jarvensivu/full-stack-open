@@ -23,7 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^7.8.2",
-    "mongoose-unique-validator": "^4.0.0"
+    "mongoose-unique-validator": "^4.0.1"
   },
   "devDependencies": {
     "@babel/traverse": ">=7.23.2",
