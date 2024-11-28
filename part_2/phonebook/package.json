@@ -11,7 +11,7 @@
     "server": "json-server -p3001 --watch db.json"
   },
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.7.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
