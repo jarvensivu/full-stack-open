@@ -8,7 +8,6 @@ const getAll = async () => {
   return diagnoses;
 };
 
-// eslint-disable-next-line
 export default {
   getAll
 };

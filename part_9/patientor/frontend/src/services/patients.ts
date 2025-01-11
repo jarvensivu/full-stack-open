@@ -30,7 +30,6 @@ const addEntry = async (id: string | undefined, object: EntryFormValues) => {
   return data;
 };
 
-// eslint-disable-next-line
 export default {
   getAll,
   getById,

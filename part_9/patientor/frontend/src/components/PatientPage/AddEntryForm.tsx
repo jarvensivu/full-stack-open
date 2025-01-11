@@ -65,6 +65,7 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
         });
         break;
       case EntryType.OccupationalHealthcare:
+        // eslint-disable-next-line no-case-declarations
         let sickLeave = undefined;
         if (sickLeaveStartDate || sickLeaveEndDate) {
           sickLeave = {
