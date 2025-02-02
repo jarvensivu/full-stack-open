@@ -22,6 +22,6 @@
     "eslint-plugin-react-hooks": "^5.1.0",
     "eslint-plugin-react-refresh": "^0.4.18",
     "json-server": "^1.0.0-alpha.23",
-    "vite": "^6.0.7"
+    "vite": "^6.0.11"
   }
 }
