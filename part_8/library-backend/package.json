@@ -14,7 +14,7 @@
     "@apollo/server": "^4.11.3",
     "@graphql-tools/schema": "^10.0.19",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "graphql": "^16.10.0",
     "graphql-subscriptions": "^2.0.0",
