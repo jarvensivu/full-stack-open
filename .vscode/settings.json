@@ -1,9 +1,3 @@
 {
-  "eslint.workingDirectories": [
-    "./part_5",
-    "./part_7/bloglist/frontend",
-    "./part_9/flight-diary/backend",
-    "./part_9/healthApp",
-    "./part_9/patientor/backend",
-  ]
+  "eslint.workingDirectories": [{ "mode": "auto" }]
 }
