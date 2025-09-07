@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node index.js",
-    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "dev": "cross-env NODE_ENV=development node --watch index.js",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "test": "cross-env NODE_ENV=test jest --verbose --runInBand",
@@ -29,7 +29,6 @@
     "@babel/traverse": ">=7.23.2",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.10",
     "supertest": "^7.1.4"
   },
   "jest": {

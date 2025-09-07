@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js",
+    "dev": "node --watch index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -24,8 +24,5 @@
     "mongoose": "^7.8.7",
     "mongoose-unique-validator": "^4.0.1",
     "ws": "^8.18.3"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.10"
   }
 }
