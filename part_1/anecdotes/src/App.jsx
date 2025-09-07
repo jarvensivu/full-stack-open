@@ -16,7 +16,6 @@ const App = () => {
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
 
   const getNextAnecdote = () => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const randomNumber = Math.floor(Math.random() * anecdotes.length);
       if (randomNumber !== selected) {
