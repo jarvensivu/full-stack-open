@@ -12,7 +12,7 @@
     "server": "json-server -p3001 --watch db.json"
   },
   "dependencies": {
-    "@reduxjs/toolkit": "^2.2.1",
+    "@reduxjs/toolkit": "^2.9.0",
     "axios": "^1.11.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
