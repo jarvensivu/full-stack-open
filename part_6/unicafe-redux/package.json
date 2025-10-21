@@ -19,10 +19,10 @@
   "devDependencies": {
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-react": "^7.22.5",
-    "@eslint/js": "^9.35.0",
+    "@eslint/js": "^9.38.0",
     "@vitejs/plugin-react": "^4.7.0",
     "deep-freeze": "^0.0.1",
-    "eslint": "^9.35.0",
+    "eslint": "^9.38.0",
     "eslint-plugin-jest": "^29.0.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
