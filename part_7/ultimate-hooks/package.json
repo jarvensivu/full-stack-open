@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
-    "server": " npx json-server --watch db.json --port 3005",
+    "server": " npx json-server db.json --port 3005",
     "preview": "vite preview"
   },
   "dependencies": {

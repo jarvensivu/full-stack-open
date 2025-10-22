@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "vite preview",
-    "server": "json-server -p3001 --watch db.json"
+    "server": "json-server -p3001 db.json"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.9.0",
