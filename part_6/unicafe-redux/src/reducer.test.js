@@ -1,4 +1,5 @@
 import deepFreeze from 'deep-freeze'
+import { describe, test, expect } from 'vitest'
 import counterReducer from './reducer'
 
 describe('unicafe reducer', () => {
