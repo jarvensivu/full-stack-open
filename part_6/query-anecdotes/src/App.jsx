@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from "react-query"
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import AnecdoteForm from "./components/AnecdoteForm";
 import Notifications from "./components/Notifications";
 import anecdoteService from "./services/anecdotes";
@@ -8,11 +8,12 @@ const App = () => {
   const queryClient = useQueryClient()
   const notificationHandler = useNotificationHandler()
 
-  const updateAnecdoteMutation = useMutation(anecdoteService.updateAnecdote, {
+  const updateAnecdoteMutation = useMutation({
+    mutationFn: anecdoteService.updateAnecdote,
     onSuccess: (updatedAnecdote) => {
-      const anecdotes = queryClient.getQueryData("anecdotes")
+      const anecdotes = queryClient.getQueryData(['anecdotes'])
       queryClient.setQueryData(
-        "anecdotes",
+        ['anecdotes'],
         anecdotes.map((anecdote) =>
           anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote
         )
@@ -27,7 +28,7 @@ const App = () => {
   };
 
   const { isLoading, isError, data } = useQuery({
-    queryKey: "anecdotes",
+    queryKey: ["anecdotes"],
     queryFn: anecdoteService.getAnecdotes,
     retry: 1,
     refetchOnWindowFocus: false,
