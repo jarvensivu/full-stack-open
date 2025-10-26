@@ -16,13 +16,13 @@
     "@eslint/js": "^9.38.0",
     "@stylistic/eslint-plugin": "^2.12.1",
     "@types/eslint__js": "^8.42.3",
-    "@types/express": "^4.17.21",
+    "@types/express": "^5.0.4",
     "eslint": "^9.38.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "express": "^5.1.0"
   }
 }
