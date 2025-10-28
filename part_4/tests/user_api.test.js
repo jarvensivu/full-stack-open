@@ -1,3 +1,5 @@
+const { test, describe, beforeEach, after } = require('node:test')
+const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
@@ -21,7 +23,7 @@ describe('creating a user', () => {
       .expect('Content-Type', /application\/json/)
 
     const usersAtEnd = await helper.usersInDb()
-    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
   })
 
   test('should fail if the username is not unique', async () => {
@@ -46,6 +48,6 @@ describe('creating a user', () => {
   })
 })
 
-afterAll(async () => {
+after(async () => {
   await mongoose.connection.close()
 })
