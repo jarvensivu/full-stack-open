@@ -25,8 +25,10 @@
     "mongoose-unique-validator": "^4.0.1"
   },
   "devDependencies": {
-    "@babel/traverse": ">=7.23.2",
-    "eslint": "^8.57.0",
+    "@eslint/js": "^9.38.0",
+    "@stylistic/eslint-plugin-js": "^4.4.1",
+    "eslint": "^9.38.0",
+    "globals": "^16.3.0",
     "supertest": "^7.1.4"
   }
 }
