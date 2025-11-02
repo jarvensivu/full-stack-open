@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client/react'
 import { ALL_AUTHORS } from '../queries'
 import SetBirthyear from './SetBirthyear'
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ApolloError, useMutation } from "@apollo/client";
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { useMutation } from "@apollo/client/react";
 import { LOGIN } from "../queries";
 
 const Login = ({ show, setError, handleLogin }) => {
@@ -9,8 +10,8 @@ const Login = ({ show, setError, handleLogin }) => {
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
       let errorMessage = "Unknown error";
-      if (error instanceof ApolloError) {
-        errorMessage = error.graphQLErrors[0].message;
+      if (error instanceof CombinedGraphQLErrors) {
+        errorMessage = error.errors.map(e => e.message).join(', ')
       }
       setError(errorMessage);
     },

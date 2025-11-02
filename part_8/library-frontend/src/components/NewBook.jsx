@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ApolloError, useMutation } from '@apollo/client'
+import { useMutation } from '@apollo/client/react'
 import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK, ALL_GENRES } from '../queries'
 
 const NewBook = ({ show, setError, favoriteGenre }) => {
@@ -12,8 +12,8 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
   const [ addBook ] = useMutation(ADD_BOOK, {
     onError: (error) => {
       let errorMessage = 'Unknown error'
-      if (error instanceof ApolloError) {
-        errorMessage = error.graphQLErrors[0].message
+      if (error.graphQLErrors) {
+        errorMessage = error.graphQLErrors.map(e => e.message).join(', ')
       }
       setError(errorMessage)
     },

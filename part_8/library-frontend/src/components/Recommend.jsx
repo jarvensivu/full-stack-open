@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client/react";
 import { ALL_BOOKS } from '../queries';
 
 const Recommend = ({ show, favoriteGenre }) => {

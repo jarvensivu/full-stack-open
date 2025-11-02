@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
 import NewBook from "./components/NewBook";
@@ -39,7 +39,7 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    setToken(null);
+    setToken("");
     localStorage.clear();
     client.resetStore();
     setPage("authors");

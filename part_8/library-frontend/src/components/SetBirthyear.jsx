@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Select from 'react-select'
-import { ApolloError, useMutation } from '@apollo/client'
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
+import { useMutation } from '@apollo/client/react'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries';
 
 const SetBirthyear = ({ allAuthors, setError }) => {
@@ -11,8 +12,8 @@ const SetBirthyear = ({ allAuthors, setError }) => {
     refetchQueries: [ { query: ALL_AUTHORS } ],
     onError: (error) => {
       let errorMessage = 'Unknown error'
-      if (error instanceof ApolloError) {
-        errorMessage = error.graphQLErrors[0].message
+      if (error instanceof CombinedGraphQLErrors) {
+        errorMessage = error.errors.map(e => e.message).join(', ')
       }
       setError(errorMessage)
     }
