@@ -12,8 +12,8 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
   const [ addBook ] = useMutation(ADD_BOOK, {
     onError: (error) => {
       let errorMessage = 'Unknown error'
-      if (error.graphQLErrors) {
-        errorMessage = error.graphQLErrors.map(e => e.message).join(', ')
+      if (error instanceof CombinedGraphQLErrors) {
+        errorMessage = error.errors.map(e => e.message).join(', ')
       }
       setError(errorMessage)
     },
