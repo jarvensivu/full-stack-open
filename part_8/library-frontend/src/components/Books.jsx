@@ -1,27 +1,31 @@
 import { useQuery } from '@apollo/client/react'
-import { ALL_BOOKS, ALL_GENRES } from '../queries'
+import { ALL_BOOKS } from '../queries'
 
 const Books = ({ show, selectedGenre, handleGenreChange }) => {
-  const bookResult = useQuery(ALL_BOOKS, {
+  const allBookResult = useQuery(ALL_BOOKS);
+  const genreBookResult = useQuery(ALL_BOOKS, {
     variables: { genre: selectedGenre }
   });
-  const genreResult = useQuery(ALL_GENRES);
 
   if (!show) {
     return null
   }
 
-  if (bookResult.loading || genreResult.loading) {
+  if (allBookResult.loading || genreBookResult.loading) {
     return <div>loading...</div>
   }
 
-  if (!bookResult.data) {
+  if (!allBookResult.data) {
     return <div>Failed to load books</div>
   }
 
-  if (bookResult.data.allBooks.length === 0 ) {
+  const genres = [...new Set(allBookResult.data.allBooks.flatMap(book => book.genres))].sort();
+  const books = selectedGenre ? genreBookResult.data.allBooks : allBookResult.data.allBooks;
+
+  if (books.length === 0) {
     return <div>No books to show</div>
   }
+
 
   return (
     <div>
@@ -36,7 +40,7 @@ const Books = ({ show, selectedGenre, handleGenreChange }) => {
             <th>author</th>
             <th>published</th>
           </tr>
-          {bookResult.data.allBooks.map((a) => (
+          {books.map((a) => (
             <tr key={a.id}>
               <td>{a.title}</td>
               <td>{a.author.name}</td>
@@ -48,13 +52,13 @@ const Books = ({ show, selectedGenre, handleGenreChange }) => {
 
       <br />
 
-      {genreResult.data.allGenres.length > 0 && (
+      {genres.length > 0 && (
         <div>
           <label>
             Select genre:
             <select value={selectedGenre} onChange={handleGenreChange}>
               <option value={""}>all</option>
-              {genreResult.data.allGenres.map((genre) => (
+              {genres.map((genre) => (
                 <option key={genre} value={genre}>
                   {genre}
                 </option>

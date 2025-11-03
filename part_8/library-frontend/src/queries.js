@@ -32,12 +32,6 @@ export const ALL_BOOKS = gql`
   ${BOOK_DETAILS}
 `
 
-export const ALL_GENRES = gql`
-  query {
-    allGenres
-  }
-`
-
 export const ADD_BOOK = gql`
   mutation createBook(
     $title: String!,

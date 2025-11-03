@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { useMutation } from '@apollo/client/react'
-import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK, ALL_GENRES } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from '../queries'
 
 const NewBook = ({ show, setError, favoriteGenre }) => {
   const [title, setTitle] = useState('')
@@ -22,30 +23,6 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
 
       if (!bookData) {
         return
-      }
-
-      // Update allGenres cache if needed
-      if (bookData?.genres.length > 0) {
-        const allGenres = cache.readQuery({ query: ALL_GENRES })
-
-        if (allGenres?.allGenres) {
-          const allGenresData = [...allGenres.allGenres]
-
-          bookData.genres.forEach(genre => {
-            if (!allGenresData.includes(genre)) {
-              allGenresData.push(genre)
-            }
-          })
-
-          if (allGenresData.length > allGenres.allGenres.length) {
-            cache.writeQuery({
-              query: ALL_GENRES,
-              data: {
-                allGenres: allGenresData.sort()
-              }
-            })
-          }
-        }
       }
 
       // Update allAuthors cache if needed
@@ -110,6 +87,18 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
             }
           })
         }
+
+        // Update allBooks cache for no genre filter
+        const allBooks = cache.readQuery({ query: ALL_BOOKS })
+
+        if (allBooks?.allBooks) {
+          cache.writeQuery({
+            query: ALL_BOOKS,
+            data: {
+              allBooks: allBooks.allBooks.concat(bookData)
+            }
+          })
+        }
       }
     }
   })
@@ -131,7 +120,7 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
   }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre))
+    setGenres(genres.concat(genre.toLocaleLowerCase()))
     setGenre('')
   }
 

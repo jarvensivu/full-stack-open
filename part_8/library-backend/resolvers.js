@@ -1,5 +1,6 @@
-const { GraphQLError } = require("graphql");
+const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken')
+const { GraphQLError } = require("graphql");
 const { PubSub } = require('graphql-subscriptions')
 const pubsub = new PubSub()
 
@@ -21,14 +22,6 @@ const resolvers = {
         return Book.find({ genres: { $in: [args.genre] } }).populate("author");
       }
       return Book.find({}).populate("author");
-    },
-    allGenres: async () => {
-      const books = await Book.find({});
-      const genres = new Set();
-      books.forEach((book) => {
-        book.genres.forEach((genre) => genres.add(genre));
-      });
-      return Array.from(genres).sort();
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
@@ -52,13 +45,12 @@ const resolvers = {
 
       try {
         let author = await Author.findOne({ name: args.author });
-
-        if (!author) author = new Author({ name: args.author });
-        await author.save();
-
+        if (!author) {
+          author = new Author({ name: args.author });
+          await author.save();
+        }
         const book = new Book({ ...args, author });
         await book.save();
-
         pubsub.publish("BOOK_ADDED", { bookAdded: book });
 
         return book;
