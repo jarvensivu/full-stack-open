@@ -81,7 +81,6 @@ const App = () => {
       <NewBook
         show={page === "add"}
         setError={notify}
-        favoriteGenre={favoriteGenre}
       />
       <Login
         show={page === "login"}

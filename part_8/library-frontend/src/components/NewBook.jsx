@@ -3,7 +3,7 @@ import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { useMutation } from '@apollo/client/react'
 import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from '../queries'
 
-const NewBook = ({ show, setError, favoriteGenre }) => {
+const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -53,52 +53,33 @@ const NewBook = ({ show, setError, favoriteGenre }) => {
           })
         }
 
-        // Update allBooks favorite genre cache if needed
-        if (favoriteGenre && bookData?.genres.includes(favoriteGenre)) {
-          const allFavoriteGenre = cache.readQuery({ query: ALL_BOOKS, variables: { genre: favoriteGenre } })
-
-          if (allFavoriteGenre?.allBooks) {
+      // Update allbooks selected genre cache if needed
+      if (bookData?.genres) {
+        const bookGenres = [... bookData.genres, ""]
+        bookGenres.forEach(bookGenre => {
+          const allBooksByGenre = cache.readQuery({ query: ALL_BOOKS, variables: { genre: bookGenre } })
+          if (allBooksByGenre?.allBooks) {
             cache.writeQuery({
               query: ALL_BOOKS,
-              variables: { genre: favoriteGenre },
+              variables: { genre: bookGenre },
               data: {
-                allBooks: allFavoriteGenre.allBooks.concat(bookData)
+                allBooks: allBooksByGenre.allBooks.concat(bookData)
               }
             })
           }
-        }
-
-        // Update allbooks selected genre cache if needed
-        if (bookData?.genres) {
-          const genres = [... bookData.genres, ""]
-          genres.forEach(genre => {
-            if (genre !== favoriteGenre) {
-              const allBooks = cache.readQuery({ query: ALL_BOOKS, variables: { genre } })
-
-              if (allBooks?.allBooks) {
-                cache.writeQuery({
-                  query: ALL_BOOKS,
-                  variables: { genre },
-                  data: {
-                    allBooks: allBooks.allBooks.concat(bookData)
-                  }
-                })
-              }
-            }
           })
         }
+      }
 
-        // Update allBooks cache for no genre filter
-        const allBooks = cache.readQuery({ query: ALL_BOOKS })
-
-        if (allBooks?.allBooks) {
-          cache.writeQuery({
-            query: ALL_BOOKS,
-            data: {
-              allBooks: allBooks.allBooks.concat(bookData)
-            }
-          })
-        }
+      // Update allBooks cache for no genre filter
+      const allBooks = cache.readQuery({ query: ALL_BOOKS })
+      if (allBooks?.allBooks) {
+        cache.writeQuery({
+          query: ALL_BOOKS,
+          data: {
+            allBooks: allBooks.allBooks.concat(bookData)
+          }
+        })
       }
     }
   })
