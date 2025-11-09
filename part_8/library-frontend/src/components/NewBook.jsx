@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { useMutation } from '@apollo/client/react'
-import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from '../queries'
+import { ADD_BOOK } from '../queries'
+import { updateBooks, updateAuthors } from '../cache';
+import { NEWBOOKERROR } from '../const';
 
 const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState('')
@@ -12,7 +14,7 @@ const NewBook = ({ show, setError }) => {
 
   const [ addBook ] = useMutation(ADD_BOOK, {
     onError: (error) => {
-      let errorMessage = 'Unknown error'
+      let errorMessage = NEWBOOKERROR
       if (error instanceof CombinedGraphQLErrors) {
         errorMessage = error.errors.map(e => e.message).join(', ')
       }
@@ -25,62 +27,8 @@ const NewBook = ({ show, setError }) => {
         return
       }
 
-      // Update allAuthors cache if needed
-      if (bookData?.author) {
-        const allAuthors = cache.readQuery({ query: ALL_AUTHORS })
-
-        if (allAuthors?.allAuthors) {
-          let allAuthorsData = [...allAuthors.allAuthors]
-          const authorExists = allAuthorsData.find(a => a.name === bookData.author.name)
-
-          if (!authorExists) {
-            const newAuthor = { ...bookData.author, bookCount: 1, born: null, id: null}
-            allAuthorsData.push(newAuthor)
-          } else {
-            allAuthorsData = allAuthorsData.map(a => {
-              if (a.name === bookData.author.name) {
-                return { ...a, bookCount: a.bookCount + 1}
-              }
-              return a
-            })
-          }
-
-          cache.writeQuery({
-            query: ALL_AUTHORS,
-            data: {
-              allAuthors: allAuthorsData
-            }
-          })
-        }
-
-      // Update allbooks selected genre cache if needed
-      if (bookData?.genres) {
-        const bookGenres = [... bookData.genres, ""]
-        bookGenres.forEach(bookGenre => {
-          const allBooksByGenre = cache.readQuery({ query: ALL_BOOKS, variables: { genre: bookGenre } })
-          if (allBooksByGenre?.allBooks) {
-            cache.writeQuery({
-              query: ALL_BOOKS,
-              variables: { genre: bookGenre },
-              data: {
-                allBooks: allBooksByGenre.allBooks.concat(bookData)
-              }
-            })
-          }
-          })
-        }
-      }
-
-      // Update allBooks cache for no genre filter
-      const allBooks = cache.readQuery({ query: ALL_BOOKS })
-      if (allBooks?.allBooks) {
-        cache.writeQuery({
-          query: ALL_BOOKS,
-          data: {
-            allBooks: allBooks.allBooks.concat(bookData)
-          }
-        })
-      }
+      updateBooks(cache, bookData)
+      updateAuthors(cache, bookData)
     }
   })
 
@@ -91,7 +39,7 @@ const NewBook = ({ show, setError }) => {
   const submit = async (event) => {
     event.preventDefault()
 
-    addBook({ variables: { title, author, published: parseInt(published), genres }})
+    addBook({ variables: { title: title.trim(), author: author.trim(), published: parseInt(published), genres } })
 
     setTitle('')
     setPublished('')
@@ -101,7 +49,9 @@ const NewBook = ({ show, setError }) => {
   }
 
   const addGenre = () => {
-    setGenres(genres.concat(genre.toLocaleLowerCase()))
+    if (genre.trim() !== '') {
+      setGenres(genres.concat(genre.toLocaleLowerCase()))
+    }
     setGenre('')
   }
 

@@ -3,6 +3,7 @@ import Select from 'react-select'
 import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { useMutation } from '@apollo/client/react'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries';
+import { AUTHORUPDATEERROR } from '../const';
 
 const SetBirthyear = ({ allAuthors, setError }) => {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -11,7 +12,7 @@ const SetBirthyear = ({ allAuthors, setError }) => {
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [ { query: ALL_AUTHORS } ],
     onError: (error) => {
-      let errorMessage = 'Unknown error'
+      let errorMessage = AUTHORUPDATEERROR;
       if (error instanceof CombinedGraphQLErrors) {
         errorMessage = error.errors.map(e => e.message).join(', ')
       }

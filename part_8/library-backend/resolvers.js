@@ -7,6 +7,7 @@ const pubsub = new PubSub()
 const Book = require("./models/book");
 const Author = require("./models/author");
 const User = require("./models/user");
+const author = require("./models/author");
 
 const resolvers = {
   Query: {
@@ -29,7 +30,17 @@ const resolvers = {
     }
   },
   Author: {
-    bookCount: async (root) => Book.find({ author: root.id }).countDocuments(),
+    name: (root) => root.name,
+    born: (root) => root.born,
+    bookCount: (root) => root.bookCount,
+    id: (root) => root._id
+  },
+  Book: {
+    title: (root) => root.title,
+    published: (root) => root.published,
+    genres: (root) => root.genres,
+    author: async (root) =>  await Author.findById(root.author),
+    id: (root) => root._id
   },
   Mutation: {
     addBook: async (root, args, context) => {
@@ -47,12 +58,12 @@ const resolvers = {
         let author = await Author.findOne({ name: args.author });
         if (!author) {
           author = new Author({ name: args.author });
-          await author.save();
         }
-        const book = new Book({ ...args, author });
+        author.bookCount += 1;
+        const book = new Book({ ...args, author: author._id });
         await book.save();
+        await author.save();
         pubsub.publish("BOOK_ADDED", { bookAdded: book });
-
         return book;
       } catch (error) {
         let errorMessage = "Saving book failed";
@@ -150,7 +161,7 @@ const resolvers = {
   },
   Subscription: {
     bookAdded: {
-      subscribe: () => pubsub.asyncIterator('BOOK_ADDED')
+      subscribe: () => pubsub.asyncIterableIterator('BOOK_ADDED')
     },
   },
 };
