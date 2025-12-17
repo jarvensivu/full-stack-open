@@ -23,6 +23,6 @@
     "typescript-eslint": "^8.46.2"
   },
   "dependencies": {
-    "express": "^5.1.0"
+    "express": "^5.2.1"
   }
 }

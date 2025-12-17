@@ -16,7 +16,7 @@
     "@graphql-tools/schema": "^10.0.26",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
     "graphql": "^16.12.0",
     "graphql-subscriptions": "^3.0.0",
     "graphql-ws": "^6.0.6",
