@@ -26,7 +26,7 @@
     "@vitejs/plugin-react": "^5.1.0",
     "@vitest/coverage-v8": "^4.0.6",
     "@vitest/eslint-plugin": "^1.4.0",
-    "cypress": "^15.5.0",
+    "cypress": "^15.8.1",
     "eslint": "^9.39.0",
     "eslint-plugin-cypress": "^5.2.0",
     "eslint-plugin-react": "^7.37.5",
