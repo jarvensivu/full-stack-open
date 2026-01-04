@@ -24,5 +24,8 @@
     "mongoose": "^7.8.7",
     "mongoose-unique-validator": "^4.0.1",
     "ws": "^8.18.3"
+  },
+  "overrides": {
+    "qs": ">=6.14.1"
   }
 }
