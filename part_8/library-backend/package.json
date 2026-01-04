@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/server": "^5.2.0",
     "@as-integrations/express5": "^1.1.2",
-    "@graphql-tools/schema": "^10.0.26",
+    "@graphql-tools/schema": "^10.0.30",
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
