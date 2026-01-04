@@ -25,6 +25,29 @@ Example:
 node scripts/check-outdated.js --json
 ```
 
+# run-linters.js
+
+Run linter across projects that include a linter
+
+Usage (from repository root):
+
+```bash
+node scripts/run-linters.js            # run linter where available
+node scripts/run-linters.js --fix     # run with --fix where supported
+node scripts/run-linters.js --json    # output machine-readable JSON
+node scripts/run-linters.js --root=./part_6 # search from a different root
+```
+
+Behavior:
+- The script searches recursively for `package.json` files.
+- For each project: if it has a `scripts.lint` entry, it runs `npm run lint`.
+- If no `lint` script exists but `eslint` (or `@eslint/js`) is listed in dependencies, it runs `npx eslint . --ext .js,.jsx,.ts,.tsx`.
+- Pass `--fix` to attempt automatic fixes where supported.
+- Output can be produced as JSON with `--json` for automation.
+
+Notes:
+- Ensure `npm` and `npx` are available in your PATH.
+- The script intentionally ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
 
 
 # update-package.js
