@@ -30,6 +30,7 @@
     "vite": "^7.3.0"
   },
   "overrides": {
-    "@babel/runtime": ">=7.26.10"
+    "@babel/runtime": ">=7.26.10",
+    "js-yaml": ">=4.1.1"
   }
 }
