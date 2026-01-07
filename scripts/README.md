@@ -55,9 +55,9 @@ Run linter across projects that include a linter
 Usage (from repository root):
 
 ```bash
-node scripts/run-linters.js            # run linter where available
-node scripts/run-linters.js --fix     # run with --fix where supported
-node scripts/run-linters.js --json    # output machine-readable JSON
+node scripts/run-linters.js  # run linter where available
+node scripts/run-linters.js --fix # run with --fix where supported
+node scripts/run-linters.js --json # output machine-readable JSON
 node scripts/run-linters.js --root=./part_6 # search from a different root
 ```
 
@@ -75,35 +75,34 @@ Notes:
 
 # update-package.js
 
-A small Node script to update a dependency to the latest version across all projects
+A small Node script to update a dependency to the latest or specified version across all projects
 
 Usage examples:
 
 - Dry-run with npm (does not modify files):
 
 ```bash
-node scripts/update-package.js lodash --manager=npm --dry-run
+node scripts/update-package.js lodash --dry-run
 ```
 
 - Actually update (preserves dev vs prod placement unless `--dev` passed):
 
 ```bash
-node scripts/update-package.js lodash --manager=npm
+node scripts/update-package.js lodash
 ```
 
 - Force install as dev-dependency:
 
 ```bash
-node scripts/update-package.js jest --manager=npm --dev
+node scripts/update-package.js jest --dev
+```
+
+- Use `--version=<semver>` to install the specified version instead of `latest`
+```bash
+node scripts/update-package.js jest --version=29.5.0
 ```
 
 Notes:
 - Script searches recursively from the repository root for `package.json` files and updates projects that already list the package.
-- Supported managers: `npm`, `yarn`, `pnpm`.
+- Uses `npm`. No other managers are supported
 - Run with `--dry-run` first to verify which projects will be changed.
-
-Additional options:
-- `--version=<semver>` — install the specified version instead of `latest`
-```bash
-node scripts/update-package.js jest --manager=npm --version=29.5.0
-```
