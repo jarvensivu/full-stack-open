@@ -12,9 +12,17 @@ const App = () => {
   const [notification, setNotification] = useState(null);
 
   useEffect(() => {
-    personService.getAll().then((persons) => {
-      setAllPersons(persons);
-    });
+    personService
+      .getAll()
+      .then((persons) => {
+        setAllPersons(persons);
+      })
+      .catch(() => {
+        setNotification({
+          type: "error",
+          text: "Failed to fetch persons",
+        });
+      });
   }, []);
 
   useEffect(() => {
@@ -104,15 +112,34 @@ const App = () => {
 
   const handleRemove = (id, name) => {
     if (window.confirm(`Delete ${name}?`)) {
-      personService.remove(id).then(() => {
-        setAllPersons((prevPersons) =>
-          prevPersons.filter((person) => person.id !== id)
-        );
-        setNotification({
-          type: "success",
-          text: `${name} was successfully deleted`,
+      personService
+        .remove(id)
+        .then(() => {
+          setAllPersons((prevPersons) =>
+            prevPersons.filter((person) => person.id !== id)
+          );
+          setNotification({
+            type: "success",
+            text: `${name} was successfully deleted`,
+          });
+        })
+        .catch((error) => {
+          if (error.response?.status === 404) {
+            setAllPersons((prevPersons) =>
+              prevPersons.filter((person) => person.id !== id)
+            );
+            // Show success notification since the person is already gone
+            setNotification({
+              type: "success",
+              text: `${name} was successfully deleted`,
+            });
+          } else {
+            setNotification({
+              type: "error",
+              text: "Unknown error",
+            });
+          }
         });
-      });
     }
   };
 
