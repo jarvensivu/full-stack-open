@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { findPackageJsons } = require('./utils');
+const { findPackageJsons, parseJsonOutput } = require('./utils');
 
 function usage() {
   console.log('Usage: node scripts/check-outdated.js [--json] [--root=<path>]');
@@ -27,18 +27,10 @@ for (const pj of pkgs) {
   const cmd = 'npm';
   const args = ['outdated', '--json', '--depth=0'];
   const res = spawnSync(cmd, args, { cwd: dir, encoding: 'utf8' });
-  let parsed = null;
-  let error = null;
   const stdout = (res.stdout || '').trim();
   const stderr = (res.stderr || '').trim();
-  if (stdout) {
-    try { parsed = JSON.parse(stdout); }
-    catch (e) { error = 'Failed to parse npm output'; }
-  } else if (stderr) {
-    // sometimes npm prints JSON to stderr when non-zero exit
-    try { parsed = JSON.parse(stderr); }
-    catch (e) { /* ignore */ }
-  }
+  let parsed = parseJsonOutput(stdout, stderr);
+
   if (!parsed) {
     // no outdated packages
     results.push({ project: dir, outdated: null });

@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
-const { findPackageJsons } = require('./utils');
+const { findPackageJsons, parseJsonOutput } = require('./utils');
 
 function usage() {
   console.log('Usage: node scripts/check-audit.js [--json] [--root=<path>]');
@@ -29,13 +29,7 @@ for (const pj of pkgs) {
   const res = spawnSync(cmd, args, { cwd: dir, encoding: 'utf8' });
   const stdout = (res.stdout || '').trim();
   const stderr = (res.stderr || '').trim();
-  let parsed = null;
-  if (stdout) {
-    try { parsed = JSON.parse(stdout); } catch (e) { /* ignore */ }
-  }
-  if (!parsed && stderr) {
-    try { parsed = JSON.parse(stderr); } catch (e) { /* ignore */ }
-  }
+  let parsed = parseJsonOutput(stdout, stderr);
 
   if (!parsed) {
     // couldn't get JSON output; record error (likely audit failed or no install)

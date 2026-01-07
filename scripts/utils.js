@@ -15,4 +15,14 @@ function findPackageJsons(dir, ignore = new Set(['node_modules','.git','dist','c
   return out;
 }
 
-module.exports = { findPackageJsons };
+function parseJsonOutput(stdout, stderr) {
+  if (stdout) {
+    try { return JSON.parse(stdout); } catch {}
+  }
+  if (stderr) {
+    try { return JSON.parse(stderr); } catch {}
+  }
+  return null;
+}
+
+module.exports = { findPackageJsons, parseJsonOutput };
