@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { findPackageJsons } = require('./utils');
 
 function usage() {
   console.log(`Usage: node scripts/update-package.js <package-name> [--dev] [--manager=npm|yarn|pnpm] [--dry-run]\n\nExample:\n  node scripts/update-package.js lodash --manager npm --dry-run`);
@@ -25,20 +26,6 @@ for (const arg of argv) {
 }
 
 if (!packageName) usage();
-
-function findPackageJsons(dir) {
-  const results = [];
-  let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
-  catch (e) { return results; }
-  for (const e of entries) {
-    if (e.name === 'node_modules' || e.name === '.git' || e.name === 'dist' || e.name === 'coverage' || e.name === 'public') continue;
-    const full = path.join(dir, e.name);
-    if (e.isFile() && e.name === 'package.json') results.push(full);
-    else if (e.isDirectory() && !e.isSymbolicLink()) results.push(...findPackageJsons(full));
-  }
-  return results;
-}
 
 const root = process.cwd();
 const allPkgJsons = findPackageJsons(root);

@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
+const { findPackageJsons } = require('./utils');
 
 function usage() {
   console.log('Usage: node scripts/check-outdated.js [--json] [--root=<path>]');
@@ -15,20 +16,6 @@ for (const a of argv) {
   if (a === '--json') outJson = true;
   else if (a.startsWith('--root=')) root = path.resolve(a.split('=')[1]);
   else usage();
-}
-
-function findPackageJsons(dir) {
-  const results = [];
-  let entries;
-  try { entries = fs.readdirSync(dir, { withFileTypes: true }); }
-  catch (e) { return results; }
-  for (const e of entries) {
-    if (e.name === 'node_modules' || e.name === '.git' || e.name === 'dist' || e.name === 'coverage' || e.name === 'public') continue;
-    const full = path.join(dir, e.name);
-    if (e.isFile() && e.name === 'package.json') results.push(full);
-    else if (e.isDirectory() && !e.isSymbolicLink()) results.push(...findPackageJsons(full));
-  }
-  return results;
 }
 
 const pkgs = findPackageJsons(root);
