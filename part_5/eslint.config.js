@@ -8,7 +8,7 @@ import cypressPlugin from 'eslint-plugin-cypress'
 import vitest from '@vitest/eslint-plugin'
 
 export default [
-    { ignores: ['dist', 'cypress.config.js'] },
+    { ignores: ['dist', 'cypress.config.js', 'coverage'] },
     {
         files: ['**/*.{js,jsx}'],
         languageOptions: {
