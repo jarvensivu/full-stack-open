@@ -5,23 +5,22 @@ const { execSync } = require('child_process');
 const { findPackageJsons } = require('./utils');
 
 function usage() {
-  console.log(`Usage: node scripts/update-package.js <package-name> [--dev] [--manager=npm|yarn|pnpm] [--dry-run]\n\nExample:\n  node scripts/update-package.js lodash --manager npm --dry-run`);
+  console.log(`Usage: node scripts/update-package.js <package-name> [--dev] [--version=<semver>] [--dry-run]\n\nExample:\n  node scripts/update-package.js lodash --version=4.17.21 --dry-run`);
   process.exit(1);
 }
 
 const argv = process.argv.slice(2);
 if (argv.length === 0) usage();
 
+
 let packageName = null;
 let version = null;
 let devFlag = false;
-let manager = 'npm';
 let dryRun = false;
 
 for (const arg of argv) {
   if (arg === '--dev') devFlag = true;
   else if (arg === '--dry-run') dryRun = true;
-  else if (arg.startsWith('--manager=')) manager = arg.split('=')[1];
   else if (arg.startsWith('--version=')) version = arg.split('=')[1];
   else if (!packageName) packageName = arg;
   else usage();
@@ -64,16 +63,8 @@ for (const item of toUpdate) {
 
   let cmd;
   const target = version ? `${packageName}@${version}` : `${packageName}@latest`;
-  if (manager === 'npm') {
-    cmd = `npm install ${target} ${installAsDev ? '--save-dev' : '--save'}`;
-  } else if (manager === 'yarn') {
-    cmd = `yarn add ${target} ${installAsDev ? '--dev' : ''}`;
-  } else if (manager === 'pnpm') {
-    cmd = `pnpm add ${installAsDev ? '-D ' : ''}${target}`;
-  } else {
-    console.error('Unsupported manager:', manager);
-    process.exit(2);
-  }
+  // simplified: use npm only
+  cmd = `npm install ${target} ${installAsDev ? '--save-dev' : '--save'}`;
 
   console.log('\n==> Project:', dir);
   console.log('Running:', cmd);
