@@ -21,7 +21,7 @@
     "graphql-subscriptions": "^3.0.0",
     "graphql-ws": "^6.0.6",
     "jsonwebtoken": "^9.0.3",
-    "mongoose": "^7.8.7",
+    "mongoose": "^7.8.8",
     "mongoose-unique-validator": "^4.0.1",
     "ws": "^8.18.3"
   },
