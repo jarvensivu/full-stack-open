@@ -101,3 +101,9 @@ Notes:
 - Script searches recursively from the repository root for `package.json` files and updates projects that already list the package.
 - Supported managers: `npm`, `yarn`, `pnpm`.
 - Run with `--dry-run` first to verify which projects will be changed.
+
+Additional options:
+- `--version=<semver>` — install the specified version instead of `latest`
+```bash
+node scripts/update-package.js jest --manager=npm --version=29.5.0
+```
