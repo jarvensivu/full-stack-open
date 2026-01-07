@@ -1,3 +1,26 @@
+# check-audit.js
+
+Audit packages across all projects
+
+Usage:
+
+From the repository root run:
+
+```bash
+node scripts/check-audit.js
+```
+
+Options:
+- `--json` — output machine-readable JSON summary (exit code 1 if vulnerabilities found)
+- `--root=<path>` — search from a different root directory
+
+Notes:
+- The script runs `npm audit --json` in each folder that contains a `package.json`.
+- For accurate results the project's dependencies should be installed (`npm install`) because `npm audit` operates on installed packages.
+- It ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Ensure `npm` is available in your PATH.
+
+
 # check-outdated.js
 
 Checks outdated dependencies across the repo
