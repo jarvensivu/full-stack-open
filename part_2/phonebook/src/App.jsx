@@ -148,7 +148,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <Notification notification={notification} />
       <Filter filterStr={filterStr} handleChangeFilter={handleChangeFilter} />
-      <h3>add a new</h3>
+      <h3>Add a new</h3>
       <PersonForm
         newPerson={newPerson}
         handleSubmit={handleSubmit}
