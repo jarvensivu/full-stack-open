@@ -20,7 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "mongoose": "^7.8.8",
+    "mongoose": "^8.21.0",
     "morgan": "^1.10.1"
   },
   "devDependencies": {
