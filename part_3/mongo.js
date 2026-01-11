@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -5,11 +6,16 @@ if (process.argv.length < 3) {
   process.exit(1)
 }
 
-const password = process.argv[2]
 const name = process.argv[3]
 const number = process.argv[4] ? process.argv[4] : ''
 
-const url = `mongodb+srv://user:${password}@cluster0.4eigpqj.mongodb.net/phonebook?retryWrites=true&w=majority`
+const prefix = 'mongodb+srv://'
+const username = process.env.USERNAME
+const password = process.argv[2] // read password from command line argument as required in the exercise
+const host = process.env.HOST
+const dbName = process.env.DB
+
+const url = `${prefix}${username}:${password}@${host}/${dbName}?retryWrites=true&w=majority`
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
