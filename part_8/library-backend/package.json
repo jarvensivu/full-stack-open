@@ -11,7 +11,7 @@
   "keywords": [],
   "author": "Juha Järvensivu",
   "dependencies": {
-    "@apollo/server": "^5.2.0",
+    "@apollo/server": "^5.4.0",
     "@as-integrations/express5": "^1.1.2",
     "@graphql-tools/schema": "^10.0.30",
     "cors": "^2.8.5",
