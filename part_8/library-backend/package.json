@@ -15,7 +15,7 @@
     "@as-integrations/express5": "^1.1.2",
     "@graphql-tools/schema": "^10.0.30",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "graphql": "^16.12.0",
     "graphql-subscriptions": "^3.0.0",
