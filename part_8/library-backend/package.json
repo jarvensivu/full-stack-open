@@ -23,7 +23,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^7.8.8",
     "mongoose-unique-validator": "^4.0.1",
-    "ws": "^8.18.3"
+    "ws": "^8.19.0"
   },
   "overrides": {
     "qs": ">=6.14.1"
