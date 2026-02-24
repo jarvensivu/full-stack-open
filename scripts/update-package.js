@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 const { findPackageJsons } = require('./utils');
 
 function usage() {
-  console.log(`Usage: node scripts/update-package.js <package-name> [--dev] [--version=<semver>] [--dry-run]\n\nExample:\n  node scripts/update-package.js lodash --version=4.17.21 --dry-run`);
+  console.log(`Usage: node scripts/update-package.js <package-name> [--dev] [--version=<semver>] [--dry-run] [--root=<path>]\n\nExample:\n  node scripts/update-package.js lodash --version=4.17.21 --dry-run`);
   process.exit(1);
 }
 
@@ -17,18 +17,24 @@ let packageName = null;
 let version = null;
 let devFlag = false;
 let dryRun = false;
+let root = process.cwd();
+let rootArg = null;
 
 for (const arg of argv) {
   if (arg === '--dev') devFlag = true;
   else if (arg === '--dry-run') dryRun = true;
   else if (arg.startsWith('--version=')) version = arg.split('=')[1];
+  else if (arg.startsWith('--root=')) rootArg = arg.split('=')[1];
   else if (!packageName) packageName = arg;
   else usage();
 }
 
 if (!packageName) usage();
 
-const root = process.cwd();
+if (rootArg) {
+  // resolve root relative to current working directory
+  root = path.resolve(process.cwd(), rootArg);
+}
 const allPkgJsons = findPackageJsons(root);
 
 const toUpdate = [];

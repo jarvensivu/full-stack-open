@@ -75,7 +75,7 @@ Notes:
 
 # update-package.js
 
-A small Node script to update a dependency to the latest or specified version across all projects
+Script for updating project dependencies
 
 Usage examples:
 
@@ -100,6 +100,12 @@ node scripts/update-package.js jest --dev
 - Use `--version=<semver>` to install the specified version instead of `latest`
 ```bash
 node scripts/update-package.js jest --version=29.5.0
+```
+
+- Use `--root=<path>` to search from a different root directory:
+
+```bash
+node scripts/update-package.js lodash --root=./part_6
 ```
 
 Notes:
