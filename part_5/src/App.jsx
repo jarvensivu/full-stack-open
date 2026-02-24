@@ -10,21 +10,24 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [notification, setNotification] = useState(null)
-  const [user, setUser] = useState(null)
-
-  const blogFormRef = useRef()
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
-  }, [])
-
-  useEffect(() => {
+  const [user, setUser] = useState(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       blogService.setToken(user.token)
-      setUser(user)
+      return user
     }
+    return null
+  })
+
+  const blogFormRef = useRef()
+
+  const sortBlogs = (blogs) => {
+    return blogs.sort((a, b) => b.likes - a.likes)
+  }
+
+  useEffect(() => {
+    blogService.getAll().then((blogs) => setBlogs(sortBlogs(blogs)))
   }, [])
 
   const loginUser = async (loginCredentials) => {
@@ -86,10 +89,6 @@ const App = () => {
     } catch (error) {
       handleError(error)
     }
-  }
-
-  const sortBlogs = (blogs) => {
-    return blogs.sort((a, b) => b.likes - a.likes)
   }
 
   const handleNotification = (message, type) => {
