@@ -24,18 +24,22 @@ const useResource = (baseUrl) => {
   const [resources, setResources] = useState([])
 
   useEffect(() => {
-    try {
-      initializeResources(baseUrl)
-    }
-    catch (error) {
-      console.log(error)
+    let cancelled = false
+
+    axios.get(baseUrl)
+      .then(response => {
+        if (!cancelled) {
+          setResources(response.data)
+        }
+      })
+      .catch(error => {
+        console.log(error)
+      })
+
+    return () => {
+      cancelled = true
     }
   }, [baseUrl])
-  
-  const initializeResources = async (baseUrl) => {
-    const response = await axios.get(baseUrl)
-    setResources(response.data)
-  }
 
   const create = async (resource) => {
     try {
@@ -69,7 +73,7 @@ const App = () => {
     noteService.create({ content: content.value })
     content.onSubmit()
   }
- 
+
   const handlePersonSubmit = (event) => {
     event.preventDefault()
     personService.create({ name: name.value, number: number.value})
