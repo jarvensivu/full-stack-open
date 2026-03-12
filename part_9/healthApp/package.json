@@ -17,12 +17,12 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.3",
+    "@eslint/js": "^9.39.4",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.6",
     "@types/node": "^20.17.10",
-    "eslint": "^9.39.3",
+    "eslint": "^9.39.4",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3",
