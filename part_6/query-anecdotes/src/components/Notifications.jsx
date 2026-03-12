@@ -1,4 +1,4 @@
-import { useNotifications} from '../context/NotificationsContext'
+import { useNotifications} from '../hooks/useNotifications'
 
 const Notifications = () => {
   const notifications = useNotifications()
@@ -9,7 +9,7 @@ const Notifications = () => {
     borderWidth: 1,
     marginBottom: 5
   }
-  
+
   if (notifications.length === 0) return null
 
   return (
