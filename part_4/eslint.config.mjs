@@ -1,5 +1,5 @@
 import globals from "globals";
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import stylisticJs from '@stylistic/eslint-plugin'
 import js from '@eslint/js'
 
 export default [
@@ -45,7 +45,7 @@ export default [
       'no-console': 'off',
     },
   },
-  { 
+  {
     ignores: ['dist/**'],
   },
 ]
