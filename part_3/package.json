@@ -24,9 +24,9 @@
     "morgan": "^1.10.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
+    "@eslint/js": "^10.0.1",
     "@stylistic/eslint-plugin": "^5.10.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.1.0",
     "globals": "^17.4.0"
   }
 }
