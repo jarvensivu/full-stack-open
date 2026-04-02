@@ -1,10 +1,15 @@
-import axios from "axios";
-
 const baseUrl = "https://studies.cs.helsinki.fi/restcountries/api/all";
 
-const getAllCountries = () => {
-  const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
+const getAllCountries = async () => {
+  try {
+    const response = await fetch(baseUrl);
+    if (!response.ok) {
+      return [];
+    }
+    return await response.json();
+  } catch {
+    return [];
+  }
 };
 
 export default getAllCountries;
