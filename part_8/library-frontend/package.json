@@ -28,9 +28,5 @@
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.4.0",
     "vite": "^8.0.7"
-  },
-  "overrides": {
-    "@babel/runtime": ">=7.26.10",
-    "js-yaml": ">=4.1.1"
   }
 }
