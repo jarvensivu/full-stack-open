@@ -24,7 +24,7 @@
     "globals": "^17.4.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.1",
-    "vite": "^8.0.6"
+    "vite": "^8.0.7"
   },
   "overrides": {
     "js-yaml": ">=4.1.1"
