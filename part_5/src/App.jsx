@@ -99,7 +99,7 @@ const App = () => {
   }
 
   const handleError = (error) => {
-    if (error.response.data.error) {
+    if (error?.response?.data?.error) {
       handleNotification(error.response.data.error, 'error')
     } else {
       handleNotification('unknown error', 'error')
