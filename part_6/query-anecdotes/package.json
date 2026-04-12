@@ -12,7 +12,7 @@
     "server": "json-server -p3001 db.json"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.95.2",
+    "@tanstack/react-query": "^5.99.0",
     "axios": "^1.14.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
