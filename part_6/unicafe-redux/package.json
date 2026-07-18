@@ -19,7 +19,7 @@
   "devDependencies": {
     "@eslint/js": "^9.39.5",
     "@vitejs/plugin-react": "^6.0.3",
-    "@vitest/eslint-plugin": "^1.6.17",
+    "@vitest/eslint-plugin": "^1.6.23",
     "deep-freeze": "^0.0.1",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
