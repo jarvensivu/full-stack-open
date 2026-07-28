@@ -48,6 +48,24 @@ Example:
 node scripts/check-outdated.js --json
 ```
 
+# install-deps.js
+
+Installs dependencies across all projects
+
+Usage:
+
+From the repository root run:
+
+```bash
+node scripts/install-deps.js
+```
+
+Options:
+- `--ci` — run `npm ci` instead of `npm install`
+- `--root=<path>` — search from a different root directory
+- `--json` — output machine-readable JSON summary
+
+
 # run-linters.js
 
 Run linter across projects that include a linter
