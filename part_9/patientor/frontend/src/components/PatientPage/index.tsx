@@ -175,10 +175,12 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
   if (isLoading) {
     return (
       <Box
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-        height="30vh"
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "30vh",
+        }}
       >
         <CircularProgress />
       </Box>
@@ -238,7 +240,7 @@ const PatientPage = ({ diagnoses }: PatientPageProps) => {
             <Typography variant="body1" sx={{ mt: 1 }}>
               no entries
             </Typography>
-          )}  
+          )}
       </Box>
     </div>
   );

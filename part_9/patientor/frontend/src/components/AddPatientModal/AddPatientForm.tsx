@@ -1,7 +1,6 @@
 import { useState, SyntheticEvent } from "react";
 
 import {  TextField, InputLabel, MenuItem, Select, Grid, Button, SelectChangeEvent } from '@mui/material';
-
 import { PatientFormValues, Gender } from "../../types";
 
 interface Props {
@@ -52,7 +51,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
       <form onSubmit={addPatient}>
         <TextField
           label="Name"
-          fullWidth 
+          fullWidth
           value={name}
           onChange={({ target }) => setName(target.value)}
         />
@@ -93,8 +92,8 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
         )}
         </Select>
 
-        <Grid>
-          <Grid item>
+        <Grid container spacing={2} sx={{ pb: 2, pt: 2 }}>
+          <Grid>
             <Button
               color="secondary"
               variant="contained"
@@ -105,7 +104,7 @@ const AddPatientForm = ({ onCancel, onSubmit }: Props) => {
               Cancel
             </Button>
           </Grid>
-          <Grid item>
+          <Grid>
             <Button
               style={{
                 float: "right",

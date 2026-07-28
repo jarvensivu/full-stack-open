@@ -108,8 +108,10 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
           fullWidth
           value={date}
           onChange={({ target }) => setDate(target.value)}
-          InputLabelProps={{
-            shrink: true,
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
           }}
         />
         <TextField
@@ -157,8 +159,10 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
               fullWidth
               value={sickLeaveStartDate}
               onChange={({ target }) => setSickLeaveStartDate(target.value)}
-              InputLabelProps={{
-                shrink: true,
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
               }}
             />
             <TextField
@@ -169,8 +173,10 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
               fullWidth
               value={sickLeaveEndDate}
               onChange={({ target }) => setSickLeaveEndDate(target.value)}
-              InputLabelProps={{
-                shrink: true,
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
               }}
             />
           </>
@@ -185,8 +191,10 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
               fullWidth
               value={dischargeDate}
               onChange={({ target }) => setDischargeDate(target.value)}
-              InputLabelProps={{
-                shrink: true,
+              slotProps={{
+                inputLabel: {
+                  shrink: true,
+                },
               }}
             />
             <TextField
@@ -215,8 +223,8 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
             ))}
           </Select>
         </FormControl>
-        <Grid sx={{ pb: 4 }}>
-          <Grid item>
+        <Grid container spacing={2} sx={{ pb: 2, pt: 2 }}>
+          <Grid>
             <Button
               color="warning"
               variant="contained"
@@ -227,7 +235,7 @@ const AddEntryForm = ({ onSubmit, onCancel, entryType, diagnoses }: Props) => {
               Cancel
             </Button>
           </Grid>
-          <Grid item>
+          <Grid>
             <Button
               style={{
                 float: "right",
