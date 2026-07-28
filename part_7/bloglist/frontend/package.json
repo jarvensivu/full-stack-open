@@ -13,8 +13,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^7.3.9",
-    "@mui/material": "^7.3.9",
+    "@mui/icons-material": "^9.2.0",
+    "@mui/material": "^9.2.0",
     "@reduxjs/toolkit": "^2.11.2",
     "axios": "^1.18.1",
     "prop-types": "^15.8.1",
