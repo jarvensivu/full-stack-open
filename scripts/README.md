@@ -1,132 +1,194 @@
-# check-audit.js
+# Scripts
 
-Audit packages across all projects
+Scripts for auditing, updating, and managing dependencies across all projects in the repository.
 
-Usage:
+---
 
-From the repository root run:
+## check-audit.js
+
+Runs `npm audit` across all projects and reports vulnerabilities.
+
+**Usage**
 
 ```bash
-node scripts/check-audit.js
+node scripts/check-audit.js [options]
 ```
 
-Options:
-- `--json` — output machine-readable JSON summary (exit code 1 if vulnerabilities found)
+**Options**
+
+- `--json` — output machine-readable JSON summary (exits with code 1 if vulnerabilities found)
 - `--root=<path>` — search from a different root directory
 
-Notes:
-- The script runs `npm audit --json` in each folder that contains a `package.json`.
-- For accurate results the project's dependencies should be installed (`npm install`) because `npm audit` operates on installed packages.
-- It ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
-- Ensure `npm` is available in your PATH.
-
-
-# check-outdated.js
-
-Checks outdated dependencies across the repo
-
-Usage:
-
-From the repository root run:
+**Examples**
 
 ```bash
-node scripts/check-outdated.js
+# Basic audit
+node scripts/check-audit.js
+
+# Machine-readable output for CI
+node scripts/check-audit.js --json
 ```
 
-Options:
+**Notes**
+
+- Runs `npm audit --json` in each directory containing a `package.json`.
+- Dependencies must be installed (`npm install`) for accurate results, because `npm audit` operates on installed packages.
+- Ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Requires `npm` to be available in your PATH.
+
+---
+
+## check-outdated.js
+
+Checks for outdated dependencies across all projects.
+
+**Usage**
+
+```bash
+node scripts/check-outdated.js [options]
+```
+
+**Options**
+
 - `--json` — output machine-readable JSON summary
 - `--root=<path>` — search from a different root directory
 
-Notes:
-- The script uses `npm outdated --json --depth=0` in each folder that contains a `package.json`.
-- It ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
-- Ensure `npm` is available in your PATH. The script uses `npm` to check versions even for projects that may use `yarn` or `pnpm`.
-
-Example:
+**Examples**
 
 ```bash
+# Basic check
+node scripts/check-outdated.js
+
+# Machine-readable output for CI
 node scripts/check-outdated.js --json
 ```
 
-# install-deps.js
+**Notes**
 
-Installs dependencies across all projects
+- Uses `npm outdated --json --depth=0` in each directory containing a `package.json`.
+- Ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Requires `npm` to be available in your PATH. Version checks always use `npm`, even for projects that may use `yarn` or `pnpm`.
 
-Usage:
+---
 
-From the repository root run:
+## install-deps.js
+
+Installs dependencies across all projects.
+
+**Usage**
 
 ```bash
-node scripts/install-deps.js
+node scripts/install-deps.js [options]
 ```
 
-Options:
+**Options**
+
 - `--ci` — run `npm ci` instead of `npm install`
-- `--root=<path>` — search from a different root directory
 - `--json` — output machine-readable JSON summary
+- `--root=<path>` — search from a different root directory
 
-
-# run-linters.js
-
-Run linter across projects that include a linter
-
-Usage (from repository root):
+**Examples**
 
 ```bash
-node scripts/run-linters.js  # run linter where available
-node scripts/run-linters.js --fix # run with --fix where supported
-node scripts/run-linters.js --json # output machine-readable JSON
-node scripts/run-linters.js --root=./part_6 # search from a different root
+# Install all dependencies
+node scripts/install-deps.js
+
+# Clean install (useful in CI)
+node scripts/install-deps.js --ci
+
+# Limit to a subdirectory
+node scripts/install-deps.js --root=./part_6
 ```
 
-Behavior:
-- The script searches recursively for `package.json` files.
-- For each project: if it has a `scripts.lint` entry, it runs `npm run lint`.
-- If no `lint` script exists but `eslint` (or `@eslint/js`) is listed in dependencies, it runs `npx eslint . --ext .js,.jsx,.ts,.tsx`.
-- Pass `--fix` to attempt automatic fixes where supported.
-- Output can be produced as JSON with `--json` for automation.
+**Notes**
 
-Notes:
-- Ensure `npm` and `npx` are available in your PATH.
-- The script intentionally ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Runs `npm install` (or `npm ci`) in each directory containing a `package.json`.
+- Ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Requires `npm` to be available in your PATH.
 
+---
 
-# update-package.js
+## run-linters.js
 
-Script for updating project dependencies
+Runs the linter across all projects that have one configured.
 
-Usage examples:
-
-- Dry-run with npm (does not modify files):
+**Usage**
 
 ```bash
+node scripts/run-linters.js [options]
+```
+
+**Options**
+
+- `--fix` — attempt automatic fixes where supported
+- `--json` — output machine-readable JSON summary (exits with code 2 if any linter fails)
+- `--root=<path>` — search from a different root directory
+
+**Examples**
+
+```bash
+# Run linters across all projects
+node scripts/run-linters.js
+
+# Auto-fix lint errors where possible
+node scripts/run-linters.js --fix
+
+# Limit to a subdirectory
+node scripts/run-linters.js --root=./part_6
+
+# Machine-readable output for CI
+node scripts/run-linters.js --json
+```
+
+**Notes**
+
+- Searches recursively for `package.json` files.
+- For each project: if a `scripts.lint` entry exists, runs `npm run lint`; otherwise, if `eslint` or `@eslint/js` is listed as a dependency, runs `npx eslint . --ext .js,.jsx,.ts,.tsx`.
+- Projects without a lint script or eslint dependency are skipped.
+- Ignores `node_modules`, `.git`, `dist`, `coverage`, and `public` directories while searching.
+- Requires `npm` and `npx` to be available in your PATH.
+
+---
+
+## update-package.js
+
+Updates a named package across all projects that already list it as a dependency.
+
+**Usage**
+
+```bash
+node scripts/update-package.js <package-name> [options]
+```
+
+**Options**
+
+- `--dev` — force installation as a dev dependency (default: preserves existing placement)
+- `--version=<semver>` — install a specific version instead of `latest`
+- `--dry-run` — print what would be changed without modifying any files
+- `--root=<path>` — search from a different root directory
+
+**Examples**
+
+```bash
+# Preview changes before applying
 node scripts/update-package.js lodash --dry-run
-```
 
-- Actually update (preserves dev vs prod placement unless `--dev` passed):
-
-```bash
+# Update to latest in all projects that use it
 node scripts/update-package.js lodash
-```
 
-- Force install as dev-dependency:
-
-```bash
-node scripts/update-package.js jest --dev
-```
-
-- Use `--version=<semver>` to install the specified version instead of `latest`
-```bash
+# Install a specific version
 node scripts/update-package.js jest --version=29.5.0
-```
 
-- Use `--root=<path>` to search from a different root directory:
+# Force install as a dev dependency
+node scripts/update-package.js jest --dev
 
-```bash
+# Limit to a subdirectory
 node scripts/update-package.js lodash --root=./part_6
 ```
 
-Notes:
-- Script searches recursively from the repository root for `package.json` files and updates projects that already list the package.
-- Uses `npm`. No other managers are supported
+**Notes**
+
+- Searches recursively from the root for `package.json` files and only updates projects that already list the package.
+- Preserves dev vs. prod placement unless `--dev` is passed.
+- Uses `npm` only. No other package managers are supported.
 - Run with `--dry-run` first to verify which projects will be changed.
