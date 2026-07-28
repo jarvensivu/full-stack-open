@@ -24,7 +24,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@vitejs/plugin-react": "^6.0.4",
     "@vitest/coverage-v8": "^4.1.10",
-    "@vitest/eslint-plugin": "^1.6.23",
+    "@vitest/eslint-plugin": "^1.6.24",
     "cypress": "^15.19.0",
     "eslint": "^9.39.5",
     "eslint-plugin-cypress": "^6.4.3",
