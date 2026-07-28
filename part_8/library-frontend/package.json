@@ -13,7 +13,7 @@
   "dependencies": {
     "@apollo/client": "^4.2.7",
     "graphql": "^16.14.0",
-    "graphql-ws": "^6.1.0",
+    "graphql-ws": "^6.2.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-select": "^5.10.2",
