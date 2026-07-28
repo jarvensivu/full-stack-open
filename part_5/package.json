@@ -27,7 +27,7 @@
     "@vitest/eslint-plugin": "^1.6.23",
     "cypress": "^15.19.0",
     "eslint": "^9.39.5",
-    "eslint-plugin-cypress": "^6.3.0",
+    "eslint-plugin-cypress": "^6.4.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
