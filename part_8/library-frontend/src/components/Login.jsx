@@ -8,7 +8,13 @@ const Login = ({ show, setError, handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const [login, result] = useMutation(LOGIN, {
+  const [login] = useMutation(LOGIN, {
+    onCompleted: (data) => {
+      const token = data.login.value;
+      handleLogin(token);
+      setUsername("");
+      setPassword("");
+    },
     onError: (error) => {
       let errorMessage = LOGINERROR;
       if (error instanceof CombinedGraphQLErrors) {
@@ -17,15 +23,6 @@ const Login = ({ show, setError, handleLogin }) => {
       setError(errorMessage);
     },
   });
-
-  useEffect(() => {
-    if (result.data) {
-      const token = result.data.login.value;
-      handleLogin(token);
-      setUsername("");
-      setPassword("");
-    }
-  }, [result.data]); // eslint-disable-line
 
   if (!show) {
     return null;
