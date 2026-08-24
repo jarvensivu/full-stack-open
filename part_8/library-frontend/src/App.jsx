@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useApolloClient, useQuery, useSubscription } from "@apollo/client/react";
 import Authors from "./components/Authors";
 import Books from "./components/Books";
@@ -14,19 +14,14 @@ const App = () => {
   const [page, setPage] = useState("authors");
   const [errorMessage, setErrorMessage] = useState(null);
   const [infoMessage, setInfoMessage] = useState(null);
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(() =>
+    localStorage.getItem("app-user-token")
+  );
   const [selectedGenre, setSelectedGenre] = useState("");
   const client = useApolloClient();
 
   const userResult = useQuery(ME);
   const favoriteGenre = userResult?.data?.me?.favoriteGenre;
-
-  useEffect(() => {
-    const localUserToken = localStorage.getItem("app-user-token");
-    if (localUserToken) {
-      setToken(localUserToken);
-    }
-  }, []);
 
   useSubscription(BOOK_ADDED, {
     onData: ({ data, client }) => {
