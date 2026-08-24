@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { CombinedGraphQLErrors } from "@apollo/client/errors";
 import { useMutation } from "@apollo/client/react";
 import { LOGIN } from "../queries";
