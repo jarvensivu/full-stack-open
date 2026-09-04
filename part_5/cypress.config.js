@@ -7,7 +7,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:5173',
   },
-  env: {
+  expose: {
     BACKEND: 'http://localhost:3003/api'
   }
 })

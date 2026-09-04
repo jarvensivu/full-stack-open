@@ -6,9 +6,9 @@ describe('Blog app', function () {
   }
 
   beforeEach(function () {
-    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+    cy.request('POST', `${Cypress.expose('BACKEND')}/testing/reset`)
     cy.visit('')
-    cy.request('POST', `${Cypress.env('BACKEND')}/users`, testUser)
+    cy.request('POST', `${Cypress.expose('BACKEND')}/users`, testUser)
   })
 
   it('Login form is shown', function () {
@@ -109,7 +109,7 @@ describe('Blog app', function () {
         username: 'another.user@test.com',
         password: 'secret',
       }
-      cy.request('POST', `${Cypress.env('BACKEND')}/users`, anotherUser)
+      cy.request('POST', `${Cypress.expose('BACKEND')}/users`, anotherUser)
       cy.login({ username: anotherUser.username, password: anotherUser.password })
       cy.contains('First Title First Author')
       cy.get('#toggle-visibility-button').click()
