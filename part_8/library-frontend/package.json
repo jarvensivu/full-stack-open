@@ -14,8 +14,8 @@
     "@apollo/client": "^4.2.12",
     "graphql": "^16.14.2",
     "graphql-ws": "^6.2.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-select": "^5.10.2",
     "rxjs": "^7.8.2"
   },

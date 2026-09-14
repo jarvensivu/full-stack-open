@@ -18,8 +18,8 @@
     "@reduxjs/toolkit": "^2.12.0",
     "axios": "^1.20.0",
     "prop-types": "^15.8.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "react-redux": "^9.3.0",
     "react-router-dom": "^6.30.6"
   },
